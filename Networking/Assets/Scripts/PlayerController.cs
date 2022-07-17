@@ -12,6 +12,10 @@ public class PlayerController : MonoBehaviour
         {
             ClientSend.PlayerShoot(camTransform.forward);
         }
+        if (Input.GetMouseButtonDown(1))
+        {
+            ClientSend.PlayerLaunchProjectile(camTransform.forward);
+        }
     }
 
     private void FixedUpdate()

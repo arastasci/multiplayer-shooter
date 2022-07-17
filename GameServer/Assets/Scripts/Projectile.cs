@@ -7,6 +7,12 @@ public class Projectile : MonoBehaviour
     [SerializeField] float explosionForce = 20f;
     [SerializeField] float explosionRadius = 3f;
     [SerializeField] float damageMultiplier = 50f;
+    public int id;
+
+    public void SetID(int id)
+    {
+        this.id = id;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -16,10 +22,17 @@ public class Projectile : MonoBehaviour
         if(collidedObject.TryGetComponent<Player>(out Player player))
         {
             float distance = Vector3.Distance(transform.position, collidedObject.transform.position);
-            float damageTaken  = damageMultiplier * 1 - (distance / explosionRadius)
+            float damageTaken = damageMultiplier * 1 - (distance / explosionRadius);
             player.TakeDamage(damageTaken);
         }
-        
-        Destroy(gameObject,2f);
+
+        Invoke(nameof(DestroyProjectile), 2f);
+    }
+    void DestroyProjectile()
+    {
+
+        ProjectileManager.Projectiles.Remove(id);
+        Destroy(gameObject);
+
     }
 }

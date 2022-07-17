@@ -62,7 +62,8 @@ public class ClientHandle : MonoBehaviour
 
     public static void LaunchedProjectile(Packet packet)
     {
-
+        int playerID = packet.ReadInt();
+        int projectileID = packet.ReadInt();
     }
     public static void ProjectileExploded(Packet packet)
     {

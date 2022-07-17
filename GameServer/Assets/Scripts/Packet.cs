@@ -16,8 +16,9 @@ public enum ServerPackets
     playerHealth,
     playerRespawned,
     createItemSpawner,
-    launchedProjectile,
-    projectileExploded
+    projectileExploded,
+    projectileLaunched,
+    projectilePosition
 
 }
 

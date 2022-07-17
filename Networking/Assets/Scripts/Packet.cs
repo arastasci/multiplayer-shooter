@@ -13,8 +13,8 @@ public enum ServerPackets
     playerHealth,
     playerRespawned,
     createItemSpawner,
-    launchedProjectile,
-    projectileExploded
+    projectileExploded,
+    projectileLaunched
 }
 
 /// <summary>Sent from client to server.</summary>

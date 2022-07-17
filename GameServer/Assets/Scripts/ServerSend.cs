@@ -121,7 +121,6 @@ public class ServerSend
         }
     }
 
-    public static void Projectile
     public static void ProjectileExploded(Vector3 position)
     {
         using (Packet packet = new Packet((int)ServerPackets.projectileExploded))
@@ -131,6 +130,24 @@ public class ServerSend
         }
     }
 
+    public static void ProjectileLaunched(Player byPlayer, int projectileID)
+    {
+        using(Packet packet = new Packet((int)ServerPackets.projectileLaunched))
+        {
+            packet.Write(byPlayer.id);
+            packet.Write(projectileID);
+            SendTCPDataToAll(packet);
+        }
+    }
+    public static void ProjectilePosition(Projectile projectile)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.projectilePosition))
+        {
+            packet.Write(projectile.id);
+            packet.Write(projectile.transform.position);
+            SendUDPDataToAll(packet);
+        }
+    }
     public static void CreateItemSpawner(int toClient, int spawnerID, Vector3 position, bool hasItem)
     {
         using(Packet packet = new Packet((int)ServerPackets.createItemSpawner))

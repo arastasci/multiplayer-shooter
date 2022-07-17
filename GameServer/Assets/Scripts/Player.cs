@@ -10,8 +10,7 @@ public class Player : MonoBehaviour
     public Rigidbody rb;
     public Transform shootOrigin;
 
-    [SerializeField]
-    GameObject projectilePrefab;
+    
 
     public bool isGrounded = true;
     public float gravity = -9.81f;
@@ -110,8 +109,8 @@ public class Player : MonoBehaviour
 
     public void LaunchProjectile(Vector3 direction)
     {
-        GameObject projectile = Instantiate(projectilePrefab, shootOrigin.position, Quaternion.identity); // dunno
-        projectile.GetComponent<Rigidbody>().AddForce(direction * projectileForceMultiplier);
+        int projectileID = ProjectileManager.instance.InitializeProjectile(this,direction);
+        ServerSend.ProjectileLaunched(this, projectileID);
     }
     public void TakeDamage(float damage)
     {
