@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextProjectileID: 0
-  projectileForceMultiplier: 2000
+  projectileForceMultiplier: 800
   projectilePrefab: {fileID: 2353998451379502618, guid: d111ea01e09281b4a8b181c74d4d9c12, type: 3}

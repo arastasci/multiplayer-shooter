@@ -23,6 +23,7 @@ public class PlayerManager : MonoBehaviour
             Die();
         }
     }
+
     public void Die()
     {
         model.enabled = false;

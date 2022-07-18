@@ -36,8 +36,9 @@ public class ProjectileManager : MonoBehaviour
     {
         int projectileID = nextProjectileID;
         nextProjectileID++;
-        Vector3 position = player.shootOrigin.position + player.shootOrigin.forward;
+        Vector3 position = player.shootOrigin.position;
         GameObject projectile = Instantiate(projectilePrefab, position, Quaternion.identity); // dunno
+        Debug.DrawRay(player.shootOrigin.position,direction, Color.yellow, 4f);
         Projectile projectileP = projectile.GetComponent<Projectile>();
         projectileP.SetID(projectileID,player.id);
         Projectiles.Add(projectileID, projectileP);

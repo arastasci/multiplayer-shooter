@@ -99,16 +99,19 @@ public class Player : MonoBehaviour
     {
         if(Physics.Raycast(shootOrigin.position,direction, out RaycastHit hitInfo,25f))
         {
+            Debug.DrawRay(shootOrigin.position, hitInfo.point, Color.yellow, 4f);
+
             if (hitInfo.collider.CompareTag("Player"))
             {
                 hitInfo.collider.GetComponent<Player>().TakeDamage(35f);
             }
         }
     }
-
+    
     public void LaunchProjectile(Vector3 direction)
     {
         ProjectileInfo projectileInfo = ProjectileManager.instance.InitializeProjectile(this, direction);
+
         ServerSend.ProjectileLaunched(this,projectileInfo.ID,projectileInfo.projectileShotFrom);
     }
     public void TakeDamage(float damage)
