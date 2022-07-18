@@ -119,10 +119,11 @@ MonoBehaviour:
   shootOrigin: {fileID: 904633796976257155}
   isGrounded: 1
   gravity: -9.81
-  moveSpeed: 5
+  moveSpeed: 1
   jumpspeed: 5
   health: 100
   maxHealth: 100
+  projectileForceMultiplier: 10
   itemAmount: 0
   maxItemAmount: 0
   maxVelocity: 4

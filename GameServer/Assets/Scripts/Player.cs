@@ -81,11 +81,10 @@ public class Player : MonoBehaviour
 
         if (isGrounded && inputs[4])
         {
-            moveDirection += transform.up * moveSpeed;
+            moveDirection += transform.up * jumpspeed;
             isGrounded = false;
         }
         rb.AddForce(moveDirection, ForceMode.VelocityChange);
-        Debug.Log(moveDirection);
         ServerSend.PlayerPosition(this);
         ServerSend.PlayerRotation(this);
         
@@ -109,8 +108,8 @@ public class Player : MonoBehaviour
 
     public void LaunchProjectile(Vector3 direction)
     {
-        int projectileID = ProjectileManager.instance.InitializeProjectile(this,direction);
-        ServerSend.ProjectileLaunched(this, projectileID);
+        ProjectileInfo projectileInfo = ProjectileManager.instance.InitializeProjectile(this, direction);
+        ServerSend.ProjectileLaunched(this,projectileInfo.ID,projectileInfo.projectileShotFrom);
     }
     public void TakeDamage(float damage)
     {

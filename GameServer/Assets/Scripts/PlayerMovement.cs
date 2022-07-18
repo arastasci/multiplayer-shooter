@@ -16,10 +16,8 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnCollisionStay(Collision collision)
     {
-        Debug.Log("collided");
         if (((1 << collision.gameObject.layer) & whatIsGround) == 0)
         {
-            Debug.Log("returnning");
             return;
         }
         for (int i = 0; i < collision.contactCount; i++)

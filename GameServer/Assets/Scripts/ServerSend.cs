@@ -121,21 +121,22 @@ public class ServerSend
         }
     }
 
-    public static void ProjectileExploded(Vector3 position)
+    public static void ProjectileExploded(int id)
     {
         using (Packet packet = new Packet((int)ServerPackets.projectileExploded))
         {
-            packet.Write(position); // will play particle effect on client side
+            packet.Write(id);
             SendTCPDataToAll(packet);
         }
     }
 
-    public static void ProjectileLaunched(Player byPlayer, int projectileID)
+    public static void ProjectileLaunched(Player byPlayer, int projectileID, Vector3 position)
     {
         using(Packet packet = new Packet((int)ServerPackets.projectileLaunched))
         {
             packet.Write(byPlayer.id);
             packet.Write(projectileID);
+            packet.Write(position);
             SendTCPDataToAll(packet);
         }
     }

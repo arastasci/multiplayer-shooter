@@ -2,10 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct ProjectileInfo
+{
+    public ProjectileInfo(int id, Vector3 position)
+    {
+        ID = id;
+        projectileShotFrom = position;
+    }
+
+    public int ID { get; }
+    public Vector3 projectileShotFrom { get; }
+
+}
 public class ProjectileManager : MonoBehaviour
 {
+    
 
-    public static Dictionary<int, Projectile> Projectiles = new Dictionary<int, Projectile>();
+        public static Dictionary<int, Projectile> Projectiles = new Dictionary<int, Projectile>();
     public static ProjectileManager instance;
     public int nextProjectileID;
     public float projectileForceMultiplier = 10f;
@@ -19,16 +32,17 @@ public class ProjectileManager : MonoBehaviour
         }
         nextProjectileID = 0;
     }
-    public int InitializeProjectile(Player player, Vector3 direction)
+    public ProjectileInfo InitializeProjectile(Player player, Vector3 direction)
     {
         int projectileID = nextProjectileID;
         nextProjectileID++;
-        GameObject projectile = Instantiate(projectilePrefab, player.shootOrigin.position + player.shootOrigin.forward * 0.7f, Quaternion.identity); // dunno
+        Vector3 position = player.shootOrigin.position + player.shootOrigin.forward;
+        GameObject projectile = Instantiate(projectilePrefab, position, Quaternion.identity); // dunno
         Projectile projectileP = projectile.GetComponent<Projectile>();
-        projectileP.SetID(projectileID);
+        projectileP.SetID(projectileID,player.id);
         Projectiles.Add(projectileID, projectileP);
         projectile.GetComponent<Rigidbody>().AddForce(direction * projectileForceMultiplier);
-        return projectileID;
+        return new ProjectileInfo(projectileID, position);
     }
 
     private void FixedUpdate()
