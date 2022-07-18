@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
 {
     public PlayerManager player;
     public float sensitivity = 100f;
-    public float clampAngle = 85f;
+    public float clampAngle = 90f;
     private float verticalRotation;
     private float horizontalRotation;
     private bool cursorLocked = false;

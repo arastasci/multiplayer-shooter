@@ -112,7 +112,9 @@ MonoBehaviour:
   explosionForce: 20
   explosionRadius: 5
   damageMultiplier: 50
+  forceMultiplier: 50
   id: 0
+  playerID: 0
 --- !u!54 &3674215624589317451
 Rigidbody:
   m_ObjectHideFlags: 0

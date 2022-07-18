@@ -350,6 +350,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 306587373946884481, guid: 9d10d9c1beeb6ee48853fe17e1ff82a5, type: 3}
+      propertyPath: projectileForceMultiplier
+      value: 2000
+      objectReference: {fileID: 0}
     - target: {fileID: 306587373946884494, guid: 9d10d9c1beeb6ee48853fe17e1ff82a5, type: 3}
       propertyPath: m_Name
       value: ProjectileManager

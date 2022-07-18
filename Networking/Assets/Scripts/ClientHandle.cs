@@ -71,7 +71,7 @@ public class ClientHandle : MonoBehaviour
     {
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
-        GameManager.instance.UpdateProjectilePosition(id, position);
+        if(GameManager.projectiles.ContainsKey(id)) GameManager.instance.UpdateProjectilePosition(id, position);
     }
     public static void ProjectileExploded(Packet packet)
     {
