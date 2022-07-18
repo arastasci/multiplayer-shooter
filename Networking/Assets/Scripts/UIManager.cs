@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
     public GameObject startMenu;
     public InputField usernameField;
-    public GameObject crossHair;
+    public GameObject gameUI;
+    public TextMeshProUGUI textMeshPro;
     private void Awake()
     {
         if (instance == null)
@@ -26,7 +27,7 @@ public class UIManager : MonoBehaviour
     public void ConnectToServer()
     {
         startMenu.SetActive(false);
-        crossHair.SetActive(true);
+        gameUI.SetActive(true);
         usernameField.interactable = false;
         Client.instance.ConnectToServer();
     }

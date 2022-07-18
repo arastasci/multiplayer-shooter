@@ -14,10 +14,18 @@ public class PlayerManager : MonoBehaviour
         this.id = id;
         username = userName;
         health = maxHealth;
+        if (id == Client.instance.myId) 
+        {
+            UIManager.instance.textMeshPro.text = maxHealth.ToString(); 
+        }
     }
     public void SetHealth(float health)
     {
         this.health = health;
+        if(id == Client.instance.myId)
+        {
+            UIManager.instance.textMeshPro.text = health.ToString();
+        }
         if(health <= 0)
         {
             Die();
