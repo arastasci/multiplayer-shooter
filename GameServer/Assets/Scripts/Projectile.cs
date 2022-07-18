@@ -27,7 +27,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        // TODO: Implement projectile colliding with player not affecting the player collided
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach(Collider collider in colliders)
         {
@@ -37,6 +37,7 @@ public class Projectile : MonoBehaviour
                 Vector3 vector = rigidbodyCollider.transform.position - transform.position;
                 float distance = vector.magnitude;
                 int damageTaken = (int)(damageMultiplier * (1 - (distance / explosionRadius)));
+
                 if (damageTaken > ForceThreshold)
                 {
                     rigidbodyCollider.AddForce(Vector3.Normalize(vector) * damageTaken * forceMultiplier, ForceMode.Acceleration);
