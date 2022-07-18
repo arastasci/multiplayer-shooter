@@ -36,7 +36,7 @@ public class Projectile : MonoBehaviour
                 Rigidbody rigidbodyCollider = collider.GetComponent<Rigidbody>();
                 Vector3 vector = rigidbodyCollider.transform.position - transform.position;
                 float distance = vector.magnitude;
-                float damageTaken = damageMultiplier * (1 - (distance / explosionRadius));
+                int damageTaken = (int)(damageMultiplier * (1 - (distance / explosionRadius)));
                 if (damageTaken > ForceThreshold)
                 {
                     rigidbodyCollider.AddForce(Vector3.Normalize(vector) * damageTaken * forceMultiplier, ForceMode.Acceleration);

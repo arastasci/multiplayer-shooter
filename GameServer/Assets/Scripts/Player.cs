@@ -16,8 +16,8 @@ public class Player : MonoBehaviour
     public float gravity = -9.81f;
     public float moveSpeed = 5f;
     public float jumpspeed = 5f;
-    public float health;
-    public float maxHealth;
+    public int health;
+    public int maxHealth;
 
     public float projectileForceMultiplier = 10f;
    
@@ -103,7 +103,7 @@ public class Player : MonoBehaviour
 
             if (hitInfo.collider.CompareTag("Player"))
             {
-                hitInfo.collider.GetComponent<Player>().TakeDamage(35f);
+                hitInfo.collider.GetComponent<Player>().TakeDamage(35);
             }
         }
     }
@@ -114,7 +114,7 @@ public class Player : MonoBehaviour
 
         ServerSend.ProjectileLaunched(this,projectileInfo.ID,projectileInfo.projectileShotFrom);
     }
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
         if(health <= 0)
         {
@@ -123,7 +123,7 @@ public class Player : MonoBehaviour
         health -= damage;
         if(health <= 0f)
         {
-            health = 0f;
+            health = 0;
             rb.isKinematic = true;
             transform.position = new Vector3(0f, 25f, 0f);
             ServerSend.PlayerPosition(this);

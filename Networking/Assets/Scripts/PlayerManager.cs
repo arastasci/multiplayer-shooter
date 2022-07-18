@@ -6,8 +6,8 @@ public class PlayerManager : MonoBehaviour
 {
     public int id;
     public string username;
-    public float health;
-    public float maxHealth;
+    public int health;
+    public int maxHealth;
     public MeshRenderer model;
     public void Initialize(int id, string userName)
     {
@@ -19,7 +19,7 @@ public class PlayerManager : MonoBehaviour
             UIManager.instance.textMeshPro.text = maxHealth.ToString(); 
         }
     }
-    public void SetHealth(float health)
+    public void SetHealth(int health)
     {
         this.health = health;
         if(id == Client.instance.myId)
