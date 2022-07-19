@@ -159,4 +159,31 @@ public class ServerSend
             SendTCPData(toClient, packet);
         }
     }
+    
+    public static void PlayerReloading(int id)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.playerReloading))
+        {
+            packet.Write(id);
+            SendTCPDataToAll(packet);
+        }
+    }
+    public static void PlayerWeaponInfo(int ofClient, Weapon weapon)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.playerWeaponInfo))
+        {
+            packet.Write(weapon.bulletLeftInMag);
+            packet.Write(weapon.bulletLeftTotal);
+            SendTCPData(ofClient, packet);
+        }
+    }
+    public static void PlayerChangeWeapon(int playerID, int weaponID)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.playerChangeWeapon))
+        {
+            packet.Write(playerID);
+            packet.Write(weaponID);
+            SendTCPDataToAll(playerID,packet);
+        }
+    }
 }

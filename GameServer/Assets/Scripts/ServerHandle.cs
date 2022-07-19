@@ -39,4 +39,20 @@ public class ServerHandle
         Vector3 direction = packet.ReadVector3();
         Server.clients[_fromClient].player.LaunchProjectile(direction);
     }
+    
+    public static void PlayerFire(int fromClient, Packet packet)
+    {
+        Vector3 direction = packet.ReadVector3();
+        Server.clients[fromClient].player.Fire(direction);   
+    }
+    public static void PlayerReload(int fromClient, Packet packet)
+    {
+        Server.clients[fromClient].player.Reload();
+    }
+    public static void PlayerChangedWeapon(int fromClient, Packet packet)
+    {
+        int newWeaponID = packet.ReadInt();
+        Server.clients[fromClient].player.SetActiveWeapon(newWeaponID);
+    }
+
 }

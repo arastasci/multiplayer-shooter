@@ -6,21 +6,61 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     Transform camTransform;
+    int weapon = 1;
+    bool changedState = false;
     private void Update()
     {
+        GetInput();
+
+        if (changedState)
+        {
+            ClientSend.PlayerChangedWeapon(weapon);
+            changedState = false;
+        }
         if (Input.GetMouseButtonDown(0))
         {
-            ClientSend.PlayerShoot(camTransform.forward);
+            ClientSend.PlayerFire(camTransform.forward);
         }
-        if (Input.GetMouseButtonDown(1))
-        {
-            ClientSend.PlayerLaunchProjectile(camTransform.forward);
-        }
+        
     }
 
     private void FixedUpdate()
     {
         SendInputToServer();
+    }
+    void CheckStateAndSend()
+    {
+        switch (weapon)
+        {
+            case 1:
+                ClientSend.PlayerShoot(camTransform.forward);
+                break;
+            case 2:
+                ClientSend.PlayerLaunchProjectile(camTransform.forward);
+                break;
+
+        }
+    }
+
+
+    void GetInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1) && weapon != 0)
+        {
+            weapon = 0;
+            changedState = true;   
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && weapon != 1)
+        {
+            weapon = 1;
+            changedState = true;
+        }
+
+        // if prompted to reload
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ClientSend.PlayerReload(weapon);
+        }
     }
     private void SendInputToServer()
     {

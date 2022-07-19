@@ -40,17 +40,26 @@ public class ClientSend : MonoBehaviour
             SendUDPData(_packet);
         }
     }
-    public static void PlayerShoot(Vector3 facing)
+    public static void PlayerChangedWeapon(int weapon)
     {
-        using(Packet packet = new Packet((int)(ClientPackets.playerShoot)))
+        using (Packet packet = new Packet((int)ClientPackets.playerChangedWeapon))
         {
-            packet.Write(facing);
+            packet.Write(weapon);
             SendTCPData(packet);
         }
     }
-    public static void PlayerLaunchProjectile(Vector3 facing)
+    public static void PlayerReload(int weapon)
     {
-        using(Packet packet = new Packet((int)ClientPackets.playerLaunchProjectile))
+        using (Packet packet = new Packet((int)ClientPackets.playerReload))
+        {
+            packet.Write(weapon);
+            SendTCPData(packet);
+        }
+    }
+
+    public static void PlayerFire(Vector3 facing)
+    {
+        using (Packet packet = new Packet((int)ClientPackets.playerFire))
         {
             packet.Write(facing);
             SendTCPData(packet);

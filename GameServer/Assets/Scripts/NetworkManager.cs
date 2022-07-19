@@ -8,8 +8,6 @@ public class NetworkManager : MonoBehaviour
     public static Dictionary<int, Projectile> Projectiles = new Dictionary<int, Projectile>();
     public int nextProjectileID;
     public float projectileForceMultiplier = 10f;
-    [SerializeField]
-    GameObject projectilePrefab;
     public GameObject playerPrefab;
     private void Awake()
     {

@@ -268,7 +268,10 @@ public class Client : MonoBehaviour
             {(int)ServerPackets.playerRespawned,ClientHandle.PlayerRespawned},
             {(int)ServerPackets.projectileLaunched,ClientHandle.LaunchedProjectile },
             {(int)ServerPackets.projectileExploded,ClientHandle.ProjectileExploded },
-            {(int)ServerPackets.projectilePosition,ClientHandle.ProjectilePosition }
+            {(int)ServerPackets.projectilePosition,ClientHandle.ProjectilePosition },
+            {(int)ServerPackets.playerReloading, ClientHandle.PlayerReloading},
+            {(int) ServerPackets.playerWeaponInfo, ClientHandle.PlayerWeaponInfo},
+            {(int)ServerPackets.playerChangeWeapon, ClientHandle.PlayerChangeWeapon}
         };
         Debug.Log("Initialized packets.");
     }

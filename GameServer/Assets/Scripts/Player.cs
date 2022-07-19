@@ -27,11 +27,9 @@ public class Player : MonoBehaviour
 
     public float maxVelocity = 4f;
 
+    Weapon[] weapons = { new Weapon(0, 7, 35, 1.5f, 0.5f), new Weapon(1,3,12, 1f, 1f)};
 
-    private void Start()
-    {
-        
-    }
+    int activeWeaponID;
 
     public void Initialize(int id, string username)
     {
@@ -39,6 +37,7 @@ public class Player : MonoBehaviour
         this.username = username;
         health = maxHealth;
         inputs = new bool[5];
+        activeWeaponID = weapons[0].id;
     }
 
     public void FixedUpdate()
@@ -97,6 +96,7 @@ public class Player : MonoBehaviour
     }
     public void Shoot(Vector3 direction)
     {
+        
         if(Physics.Raycast(shootOrigin.position,direction, out RaycastHit hitInfo,25f))
         {
             Debug.DrawRay(shootOrigin.position, hitInfo.point, Color.yellow, 4f);
@@ -106,6 +106,7 @@ public class Player : MonoBehaviour
                 hitInfo.collider.GetComponent<Player>().TakeDamage(35);
             }
         }
+
     }
     
     public void LaunchProjectile(Vector3 direction)
@@ -113,6 +114,33 @@ public class Player : MonoBehaviour
         ProjectileInfo projectileInfo = ProjectileManager.instance.InitializeProjectile(this, direction);
 
         ServerSend.ProjectileLaunched(this,projectileInfo.ID,projectileInfo.projectileShotFrom);
+    }
+
+    public void Fire(Vector3 direction)
+    {
+        if (!weapons[activeWeaponID].canShoot) return;
+        weapons[activeWeaponID].DecrementBullet(id);
+        switch (activeWeaponID)
+        {
+            case 1:
+                Shoot(direction);
+                break;
+            case 2:
+                LaunchProjectile(direction);
+                break;
+        }
+        ServerSend.PlayerWeaponInfo(id,weapons[activeWeaponID]);
+    }
+    public void Reload()
+    {
+        weapons[activeWeaponID].Reload(id);
+
+        ServerSend.PlayerReloading(id);
+    }
+    public void SetActiveWeapon(int weaponID)
+    {
+        activeWeaponID = weaponID;
+        ServerSend.PlayerChangeWeapon(id,weaponID);
     }
     public void TakeDamage(int damage)
     {
