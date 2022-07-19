@@ -16,7 +16,8 @@ public class PlayerManager : MonoBehaviour
         health = maxHealth;
         if (id == Client.instance.myId) 
         {
-            UIManager.instance.textMeshPro.text = maxHealth.ToString(); 
+            UIManager.instance.slider.maxValue = maxHealth;
+            UIManager.instance.UpdateHealth(maxHealth);
         }
     }
     public void SetHealth(int health)
@@ -24,7 +25,8 @@ public class PlayerManager : MonoBehaviour
         this.health = health;
         if(id == Client.instance.myId)
         {
-            UIManager.instance.textMeshPro.text = health.ToString();
+
+            UIManager.instance.UpdateHealth(health);
         }
         if(health <= 0)
         {

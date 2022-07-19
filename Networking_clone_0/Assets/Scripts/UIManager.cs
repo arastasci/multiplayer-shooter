@@ -10,7 +10,9 @@ public class UIManager : MonoBehaviour
     public GameObject startMenu;
     public InputField usernameField;
     public GameObject gameUI;
-    public TextMeshProUGUI textMeshPro;
+    public Slider slider;
+    [SerializeField] TextMeshProUGUI textMeshPro;
+    [SerializeField] float rotationSpeed = 0.1f;
     private void Awake()
     {
         if (instance == null)
@@ -22,11 +24,24 @@ public class UIManager : MonoBehaviour
             Debug.Log("Instance already exists.");
             Destroy(this);
         }
+        
+        
+    }
+    private void Start()
+    {
+        
     }
 
+    public void UpdateHealth(int health)
+    {
+        textMeshPro.text = health.ToString();
+        slider.value = health;
+
+    }
     public void ConnectToServer()
     {
         startMenu.SetActive(false);
+        Destroy(RotateWorldInMenu.instance);
         gameUI.SetActive(true);
         usernameField.interactable = false;
         Client.instance.ConnectToServer();

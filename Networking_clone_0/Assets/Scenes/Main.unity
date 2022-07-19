@@ -967,7 +967,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1044,7 +1044,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -799.4, y: -333.5}
+  m_AnchoredPosition: {x: -700, y: -420}
   m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1053579762
@@ -1077,7 +1077,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4289096966
-  m_fontColor: {r: 0.023529414, g: 0.427451, b: 0.6509804, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1101,7 +1101,7 @@ MonoBehaviour:
   m_fontSizeMin: 0
   m_fontSizeMax: 0
   m_fontStyle: 0
-  m_HorizontalAlignment: 4
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1293,6 +1293,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4b13750c61ea2e478ef8ec0a8f0feed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1606414807 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 438733560703467752, guid: 7e2ed83cefa6fde40bbf2528d57e6425, type: 3}
+  m_PrefabInstance: {fileID: 1920043956}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1606414809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606414807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e1bfecb52f76d408b5a5a25ef76eba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 8
 --- !u!1 &1724981304
 GameObject:
   m_ObjectHideFlags: 0
@@ -1751,7 +1769,9 @@ MonoBehaviour:
   startMenu: {fileID: 839698434}
   usernameField: {fileID: 1973978038}
   gameUI: {fileID: 545706998}
+  slider: {fileID: 1292872059}
   textMeshPro: {fileID: 1053579762}
+  rotationSpeed: 0.1
 --- !u!114 &2119756579
 MonoBehaviour:
   m_ObjectHideFlags: 0
