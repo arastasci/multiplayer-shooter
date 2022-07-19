@@ -28,19 +28,7 @@ public class PlayerController : MonoBehaviour
     {
         SendInputToServer();
     }
-    void CheckStateAndSend()
-    {
-        switch (weapon)
-        {
-            case 1:
-                ClientSend.PlayerShoot(camTransform.forward);
-                break;
-            case 2:
-                ClientSend.PlayerLaunchProjectile(camTransform.forward);
-                break;
-
-        }
-    }
+    
 
 
     void GetInput()

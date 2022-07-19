@@ -4,24 +4,23 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public Weapon(int id, int magSize, int maxBullets, float reloadTime, float firePeriod)
-    {
-        this.id = id;
-        this.magSize = magSize;
-        this.reloadTime = reloadTime;
-        bulletLeftInMag = magSize;
-        this.bulletLeftTotal = maxBullets - magSize;
-        this.firePeriod = firePeriod;
-        canReload = true;
-    }
     public int id;
     public int magSize;
     public float reloadTime;
     public int bulletLeftInMag;
     public int bulletLeftTotal;
     public float firePeriod;
-    public bool canReload;
+    public bool canReload = true;
     public bool canShoot = true;
+    private void Start()
+    {
+        bulletLeftInMag = magSize;
+        bulletLeftTotal -= magSize;
+        canReload = true;
+        canShoot = true;
+    }
+    
+    
     public void Reload(int playerID)
     {
         if (canReload)
@@ -36,6 +35,12 @@ public class Weapon : MonoBehaviour
         if (bulletLeftInMag > 0)
         {
             bulletLeftInMag--;
+
+            if (bulletLeftInMag == 0)
+            {
+                canShoot = false;
+                Reload(playerID);
+            }
 
         }
         else 
@@ -52,6 +57,11 @@ public class Weapon : MonoBehaviour
         {
             canReload = false;
         }
+        else
+        {
+            canReload = true;
+        }
+        canShoot = true;
         ServerSend.PlayerWeaponInfo(playerID, this);
 
 

@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
 
     public float maxVelocity = 4f;
 
-    Weapon[] weapons = { new Weapon(0, 7, 35, 1.5f, 0.5f), new Weapon(1,3,12, 1f, 1f)};
+    public Weapon[] weapons = new Weapon[2];
 
     int activeWeaponID;
 
@@ -122,11 +122,12 @@ public class Player : MonoBehaviour
         weapons[activeWeaponID].DecrementBullet(id);
         switch (activeWeaponID)
         {
-            case 1:
+            case 0:
                 Shoot(direction);
                 break;
-            case 2:
+            case 1:
                 LaunchProjectile(direction);
+                Debug.Log("player fired");
                 break;
         }
         ServerSend.PlayerWeaponInfo(id,weapons[activeWeaponID]);

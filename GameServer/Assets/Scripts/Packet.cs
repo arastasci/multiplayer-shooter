@@ -21,7 +21,8 @@ public enum ServerPackets
     projectilePosition,
     playerReloading,
     playerWeaponInfo,
-    playerChangeWeapon
+    playerChangeWeapon,
+    playerReloaded
     
 }
 

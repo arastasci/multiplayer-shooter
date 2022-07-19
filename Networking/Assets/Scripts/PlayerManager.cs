@@ -9,6 +9,8 @@ public class PlayerManager : MonoBehaviour
     public int health;
     public int maxHealth;
     public MeshRenderer model;
+    [SerializeField] GameObject[] weapons = new GameObject[2];
+    int activeWeapon = 1;
     public void Initialize(int id, string userName)
     {
         this.id = id;
@@ -42,5 +44,12 @@ public class PlayerManager : MonoBehaviour
     {
         model.enabled = true;
         SetHealth(maxHealth);
+    }
+
+    public void SetActiveWeapon(int id)
+    {
+        weapons[activeWeapon].SetActive(false);
+        activeWeapon = id;
+        weapons[activeWeapon].SetActive(true);
     }
 }

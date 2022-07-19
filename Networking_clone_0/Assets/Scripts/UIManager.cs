@@ -11,7 +11,8 @@ public class UIManager : MonoBehaviour
     public InputField usernameField;
     public GameObject gameUI;
     public Slider slider;
-    [SerializeField] TextMeshProUGUI textMeshPro;
+    [SerializeField] TextMeshProUGUI healthPoint;
+    [SerializeField] TextMeshProUGUI ammoInfo;
     private void Awake()
     {
         if (instance == null)
@@ -33,7 +34,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHealth(int health)
     {
-        textMeshPro.text = health.ToString();
+        healthPoint.text = health.ToString();
         slider.value = health;
 
     }

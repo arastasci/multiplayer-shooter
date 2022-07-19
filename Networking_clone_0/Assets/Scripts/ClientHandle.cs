@@ -79,5 +79,22 @@ public class ClientHandle : MonoBehaviour
         int id = packet.ReadInt();
         GameManager.ProjectileExplode(id);
     }
+    public static void PlayerReloading(Packet packet)
+    {
+        int id = packet.ReadInt();
+        // make player play reload animation
+    }
+    public static void PlayerWeaponInfo(Packet packet)
+    {
+        int bulletLeftInMag = packet.ReadInt();
+        int bulletLeftTotal = packet.ReadInt();
+        // uimanagerdan texti güncelleyen fonksyino cag?r
+    }
+    public static void PlayerChangeWeapon(Packet packet)
+    {
+        int playerID = packet.ReadInt();
+        int weaponID = packet.ReadInt();
+        GameManager.players[playerID].SetActiveWeapon(weaponID);
 
+    }
 }

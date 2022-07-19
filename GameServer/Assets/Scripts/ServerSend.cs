@@ -168,6 +168,14 @@ public class ServerSend
             SendTCPDataToAll(packet);
         }
     }
+    public static void PlayerReloaded(int id)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.playerReloaded))
+        {
+            packet.Write(id);
+            SendTCPDataToAll(packet);
+        }
+    }
     public static void PlayerWeaponInfo(int ofClient, Weapon weapon)
     {
         using (Packet packet = new Packet((int)ServerPackets.playerWeaponInfo))
@@ -183,7 +191,7 @@ public class ServerSend
         {
             packet.Write(playerID);
             packet.Write(weaponID);
-            SendTCPDataToAll(playerID,packet);
+            SendTCPDataToAll(packet);
         }
     }
 }
