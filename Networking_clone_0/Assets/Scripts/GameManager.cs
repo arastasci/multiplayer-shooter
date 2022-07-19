@@ -24,7 +24,10 @@ public class GameManager : MonoBehaviour
             Destroy(this);
         }
     }
-
+    private void Start()
+    {
+        Debug.Log(projectiles.ToString());
+    }
     public void SpawnPlayer(int _id, string username, Vector3 position, Quaternion rotation)
     {
         GameObject player;
@@ -47,6 +50,7 @@ public class GameManager : MonoBehaviour
     }
     public static void ProjectileExplode(int id)
     {
+        Debug.Log("exploded");
         GameObject projectile = projectiles[id].gameObject;
         projectiles.Remove(id);
         Destroy(projectile);

@@ -12,7 +12,6 @@ public class UIManager : MonoBehaviour
     public GameObject gameUI;
     public Slider slider;
     [SerializeField] TextMeshProUGUI textMeshPro;
-    [SerializeField] float rotationSpeed = 0.1f;
     private void Awake()
     {
         if (instance == null)
