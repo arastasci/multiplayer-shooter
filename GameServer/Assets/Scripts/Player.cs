@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
         health = maxHealth;
         inputs = new bool[5];
         activeWeaponID = weapons[0].id;
+        ServerSend.PlayerWeaponInfo(id, weapons[activeWeaponID]);
     }
 
     public void FixedUpdate()
@@ -142,6 +143,7 @@ public class Player : MonoBehaviour
     {
         activeWeaponID = weaponID;
         ServerSend.PlayerChangeWeapon(id,weaponID);
+        ServerSend.PlayerWeaponInfo(id, weapons[weaponID]);
     }
     public void TakeDamage(int damage)
     {

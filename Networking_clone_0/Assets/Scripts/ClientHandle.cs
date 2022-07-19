@@ -88,7 +88,7 @@ public class ClientHandle : MonoBehaviour
     {
         int bulletLeftInMag = packet.ReadInt();
         int bulletLeftTotal = packet.ReadInt();
-        // uimanagerdan texti güncelleyen fonksyino cag?r
+        UIManager.instance.UpdateAmmoInfo(bulletLeftInMag, bulletLeftTotal);
     }
     public static void PlayerChangeWeapon(Packet packet)
     {

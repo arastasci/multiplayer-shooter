@@ -12,10 +12,15 @@ public class Weapon : MonoBehaviour
     public float firePeriod;
     public bool canReload = true;
     public bool canShoot = true;
+    private void Awake()
+    {
+        bulletLeftTotal -= magSize;
+        bulletLeftInMag = magSize;
+    }
     private void Start()
     {
-        bulletLeftInMag = magSize;
-        bulletLeftTotal -= magSize;
+        
+        
         canReload = true;
         canShoot = true;
     }
@@ -32,27 +37,42 @@ public class Weapon : MonoBehaviour
     }
     public void DecrementBullet(int playerID)
     {
-        if (bulletLeftInMag > 0)
+        bulletLeftInMag--;
+        if(bulletLeftInMag == 0)
         {
-            bulletLeftInMag--;
+            canShoot = false;
 
-            if (bulletLeftInMag == 0)
-            {
-                canShoot = false;
-                Reload(playerID);
-            }
+            Reload(playerID);
+        }
+        //if (bulletLeftInMag > 0)
+        //{
+        //    bulletLeftInMag--;
 
-        }
-        else 
-        {
-            Reload(playerID);  
-        }
+        //    if (bulletLeftInMag == 0)
+        //    {
+        //        canShoot = false;
+        //        Reload(playerID);
+        //    }
+
+        //}
+        //else 
+        //{
+        //    Reload(playerID);  
+        //}
     }
     IEnumerator WrappedReload(int playerID)
     {
         yield return new WaitForSeconds(this.reloadTime);
-        bulletLeftTotal = Mathf.Max(magSize, 0);
-        bulletLeftInMag = Mathf.Min(bulletLeftTotal, magSize);
+        if(bulletLeftTotal <= magSize - bulletLeftInMag)
+        {
+            bulletLeftInMag += bulletLeftTotal;
+            bulletLeftTotal = 0;
+        }
+        else
+        {
+            bulletLeftTotal -= magSize- bulletLeftInMag;
+            bulletLeftInMag = magSize;
+        }
         if (bulletLeftTotal == 0)
         {
             canReload = false;

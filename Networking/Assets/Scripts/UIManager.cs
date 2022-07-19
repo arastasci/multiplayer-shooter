@@ -38,6 +38,10 @@ public class UIManager : MonoBehaviour
         slider.value = health;
 
     }
+    public void UpdateAmmoInfo(int ammoInMag, int ammoTotal)
+    {
+        ammoInfo.text = ammoInMag.ToString() + " / " + ammoTotal.ToString();
+    }
     public void ConnectToServer()
     {
         startMenu.SetActive(false);

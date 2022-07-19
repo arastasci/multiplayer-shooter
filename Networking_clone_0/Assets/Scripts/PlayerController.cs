@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     Transform camTransform;
-    int weapon = 1;
+    int weapon = 0;
     bool changedState = false;
     private void Update()
     {
