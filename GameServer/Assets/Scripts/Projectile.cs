@@ -42,7 +42,7 @@ public class Projectile : MonoBehaviour
                 {
                     rigidbodyCollider.AddForce(Vector3.Normalize(vector) * damageTaken * forceMultiplier, ForceMode.Acceleration);
                 }
-                if(playerID != player.id)  player.TakeDamage(damageTaken);
+                if(playerID != player.id)  player.TakeDamage(damageTaken, playerID);
 
             }
         }    

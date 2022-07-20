@@ -10,7 +10,6 @@ public class Player : MonoBehaviour
     public Rigidbody rb;
     public Transform shootOrigin;
 
-    
 
     public bool isGrounded = true;
     public float gravity = -9.81f;
@@ -20,11 +19,13 @@ public class Player : MonoBehaviour
     public int maxHealth;
 
     public float projectileForceMultiplier = 10f;
-   
+
     public int itemAmount;
     public int maxItemAmount;
     private bool[] inputs;
 
+    private int killCount = 0;
+    private int deathCount = 0;
     public float maxVelocity = 4f;
 
     public Weapon[] weapons = new Weapon[2];
@@ -65,15 +66,15 @@ public class Player : MonoBehaviour
 
         Move(inputDir);
     }
-    
-    
+
+
     private void Move(Vector2 inputDirection)
     {
         Vector3 moveDirection = Vector3.zero;
 
         Vector3 velocity = rb.velocity;
         float planarVelocity = Mathf.Sqrt(Mathf.Pow(velocity.x, 2) + Mathf.Pow(velocity.z, 2));
-        if ( planarVelocity < maxVelocity)
+        if (planarVelocity < maxVelocity)
         {
             moveDirection = transform.right * inputDirection.x + transform.forward * inputDirection.y;
             moveDirection *= moveSpeed;
@@ -87,7 +88,7 @@ public class Player : MonoBehaviour
         rb.AddForce(moveDirection, ForceMode.VelocityChange);
         ServerSend.PlayerPosition(this);
         ServerSend.PlayerRotation(this);
-        
+
     }
 
     public void SetInput(bool[] inputs, Quaternion rotation)
@@ -97,24 +98,24 @@ public class Player : MonoBehaviour
     }
     public void Shoot(Vector3 direction)
     {
-        
-        if(Physics.Raycast(shootOrigin.position,direction, out RaycastHit hitInfo,25f))
+
+        if (Physics.Raycast(shootOrigin.position, direction, out RaycastHit hitInfo, 25f))
         {
             Debug.DrawRay(shootOrigin.position, hitInfo.point, Color.yellow, 4f);
 
             if (hitInfo.collider.CompareTag("Player"))
             {
-                hitInfo.collider.GetComponent<Player>().TakeDamage(35);
+                hitInfo.collider.GetComponent<Player>().TakeDamage(35, id);
             }
         }
 
     }
-    
+
     public void LaunchProjectile(Vector3 direction)
     {
         ProjectileInfo projectileInfo = ProjectileManager.instance.InitializeProjectile(this, direction);
 
-        ServerSend.ProjectileLaunched(this,projectileInfo.ID,projectileInfo.projectileShotFrom);
+        ServerSend.ProjectileLaunched(this, projectileInfo.ID, projectileInfo.projectileShotFrom);
     }
 
     public void Fire(Vector3 direction)
@@ -131,7 +132,7 @@ public class Player : MonoBehaviour
                 Debug.Log("player fired");
                 break;
         }
-        ServerSend.PlayerWeaponInfo(id,weapons[activeWeaponID]);
+        ServerSend.PlayerWeaponInfo(id, weapons[activeWeaponID]);
     }
     public void Reload()
     {
@@ -142,10 +143,25 @@ public class Player : MonoBehaviour
     public void SetActiveWeapon(int weaponID)
     {
         activeWeaponID = weaponID;
-        ServerSend.PlayerChangeWeapon(id,weaponID);
+        ServerSend.PlayerChangeWeapon(id, weaponID);
         ServerSend.PlayerWeaponInfo(id, weapons[weaponID]);
     }
-    public void TakeDamage(int damage)
+
+    public void IncrementKill()
+    {
+        killCount++;
+    }
+    public void IncrementDeath()
+    {
+        deathCount++;
+    }
+    public int GetKill() => killCount;
+    public int GetDeath()
+    {
+        return deathCount;
+    }
+
+    public void TakeDamage(int damage,int byPlayer)
     {
         if(health <= 0)
         {
@@ -154,6 +170,8 @@ public class Player : MonoBehaviour
         health -= damage;
         if(health <= 0f)
         {
+            Server.clients[byPlayer].player.IncrementKill();
+            IncrementDeath();
             health = 0;
             rb.isKinematic = true;
             transform.position = new Vector3(0f, 25f, 0f);

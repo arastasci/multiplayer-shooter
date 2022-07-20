@@ -54,5 +54,6 @@ public class ServerHandle
         int newWeaponID = packet.ReadInt();
         Server.clients[fromClient].player.SetActiveWeapon(newWeaponID);
     }
+    
 
 }

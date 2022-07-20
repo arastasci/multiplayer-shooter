@@ -194,4 +194,20 @@ public class ServerSend
             SendTCPDataToAll(packet);
         }
     }
+    public static void UpdateScoreBoard()
+    {
+        using (Packet packet = new Packet((int)ServerPackets.updateScoreboard))
+        {
+            packet.Write(Server.clients.Count);
+            foreach (Client client in Server.clients.Values)
+            {
+                packet.Write(client.player.id);
+                packet.Write(client.player.GetKill());
+                packet.Write(client.player.GetDeath());
+                
+                // todo: ping player and send info
+            }
+            SendTCPDataToAll(packet);
+        }
+    }
 }

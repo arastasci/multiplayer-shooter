@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public static Dictionary<int, PlayerManager> players = new Dictionary<int, PlayerManager>();
     public static Dictionary<int, ProjectileManager> projectiles = new Dictionary<int, ProjectileManager>();
 
+    
+
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
     public GameObject projectilePrefab;

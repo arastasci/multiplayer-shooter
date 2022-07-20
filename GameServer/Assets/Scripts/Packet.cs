@@ -22,7 +22,8 @@ public enum ServerPackets
     playerReloading,
     playerWeaponInfo,
     playerChangeWeapon,
-    playerReloaded
+    playerReloaded,
+    updateScoreboard
     
 }
 

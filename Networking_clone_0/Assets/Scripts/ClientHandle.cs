@@ -97,4 +97,18 @@ public class ClientHandle : MonoBehaviour
         GameManager.players[playerID].SetActiveWeapon(weaponID);
 
     }
+    public static void UpdateScoreboard(Packet packet)
+    {
+        int playerCount = packet.ReadInt();
+        List<Utilities.ScoreboardInfo> scoreboardList = new List<Utilities.ScoreboardInfo>();
+        for (int i = 0; i < playerCount; i++)
+        {
+            int playerID = packet.ReadInt();
+            int killCount = packet.ReadInt();
+            int deathCount = packet.ReadInt();
+            scoreboardList.Add(new Utilities.ScoreboardInfo(playerID, killCount, deathCount));
+        }
+        scoreboardList.Sort((player1,player2)=> player1.killCount.CompareTo(player2.killCount));
+        UIManager.instance.UpdateScoreboard(scoreboardList, playerCount);
+    }
 }

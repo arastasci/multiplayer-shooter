@@ -13,6 +13,9 @@ public class UIManager : MonoBehaviour
     public Slider slider;
     [SerializeField] TextMeshProUGUI healthPoint;
     [SerializeField] TextMeshProUGUI ammoInfo;
+
+    Stack<GameObject> ScoreCards; // store scorecards in this remove add them here
+    private int lastPlayerCountInScoreboard;
     private void Awake()
     {
         if (instance == null)
@@ -49,5 +52,38 @@ public class UIManager : MonoBehaviour
         gameUI.SetActive(true);
         usernameField.interactable = false;
         Client.instance.ConnectToServer();
+    }
+    // when initializing a new client and when a client disconnects, call this method
+    public void UpdateScoreboard(List<Utilities.ScoreboardInfo> scoreboardInfos, int playerCount)
+    {
+        if (playerCount > lastPlayerCountInScoreboard)
+        {
+            for(int i = 0; i < playerCount - lastPlayerCountInScoreboard; i++)
+            CreateScoreItem();
+        }
+        else if (playerCount < lastPlayerCountInScoreboard)
+        {
+            for (int i = 0; i < lastPlayerCountInScoreboard - playerCount; i++)
+                DeleteScoreItem();
+        }
+        foreach (Utilities.ScoreboardInfo scoreboardInfo in scoreboardInfos)
+        {
+            // fill info of scorecards yes okay
+            //
+            
+        }
+    }
+    void CreateScoreItem()
+    {
+        //instantiate and add to ScoreCards
+        GameObject scoreCard = null;
+        ScoreCards.Push(scoreCard);
+    }
+    void DeleteScoreItem()
+    {
+        // remove from scorecards and destroy
+
+        Destroy(ScoreCards.Pop());
+
     }
 }
