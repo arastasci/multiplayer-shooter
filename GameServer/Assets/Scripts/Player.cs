@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
 
     public Weapon[] weapons = new Weapon[2];
 
-    int activeWeaponID;
+    [HideInInspector] public int activeWeaponID;
 
     public void Initialize(int id, string username)
     {
@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
         health = maxHealth;
         inputs = new bool[5];
         activeWeaponID = weapons[0].id;
-        ServerSend.PlayerWeaponInfo(id, weapons[activeWeaponID]);
+        
     }
 
     public void FixedUpdate()
@@ -133,6 +133,7 @@ public class Player : MonoBehaviour
                 break;
         }
         ServerSend.PlayerWeaponInfo(id, weapons[activeWeaponID]);
+        
     }
     public void Reload()
     {

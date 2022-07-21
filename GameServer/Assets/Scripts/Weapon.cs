@@ -37,7 +37,9 @@ public class Weapon : MonoBehaviour
     }
     public void DecrementBullet(int playerID)
     {
+        if (!canShoot) return;
         bulletLeftInMag--;
+        StartCoroutine(ShootCooldown());
         if(bulletLeftInMag == 0)
         {
             canShoot = false;
@@ -59,6 +61,13 @@ public class Weapon : MonoBehaviour
         //{
         //    Reload(playerID);  
         //}
+    }
+
+    IEnumerator ShootCooldown()
+    {
+        canShoot = false;
+        yield return new WaitForSeconds(this.firePeriod);
+        canShoot = true;
     }
     IEnumerator WrappedReload(int playerID)
     {

@@ -7,7 +7,7 @@ public class Utilities : MonoBehaviour
 
     public static Utilities instance;
 
-    public int lastPlayerCountInScoreboard;
+    
     private void Awake()
     {
         if(instance == null)

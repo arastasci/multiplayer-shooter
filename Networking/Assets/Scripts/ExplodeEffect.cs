@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class ExplodeEffect : MonoBehaviour
 {
-    ParticleSystem particleSystem;
+    ParticleSystem particle;
     // Start is called before the first frame update
     void Start()
     {
-        particleSystem = GetComponent<ParticleSystem>();
-        particleSystem.Play();
+        particle = GetComponent<ParticleSystem>();
+        particle.Play();
     }
     private void FixedUpdate()
     {
-        if (!particleSystem.isPlaying) Destroy(gameObject);
+        if (!particle.isPlaying) Destroy(gameObject);
     }
 
 

@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
     public int maxHealth;
     public MeshRenderer model;
     [SerializeField] GameObject[] weapons = new GameObject[2];
-    int activeWeapon = 0;
+    int activeWeapon = 1;
     public void Initialize(int id, string userName)
     {
         this.id = id;

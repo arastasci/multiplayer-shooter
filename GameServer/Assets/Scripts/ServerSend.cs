@@ -72,6 +72,7 @@ public class ServerSend
             packet.Write(player.transform.rotation);
             SendTCPData(_toClient, packet);
         }
+        
     }
 
     public static void PlayerPosition(Player player)

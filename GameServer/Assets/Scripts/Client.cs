@@ -202,6 +202,8 @@ public class Client
                 ServerSend.SpawnPlayer(client.id, player);
             }
         }
+        ServerSend.PlayerWeaponInfo(player.id, player.weapons[player.activeWeaponID]);
+        ServerSend.PlayerChangeWeapon(player.id, player.activeWeaponID);
     }
     private void Disconnect()
     {
