@@ -18,17 +18,6 @@ public class Utilities : MonoBehaviour
         }
     }
 
-    public struct ScoreboardInfo
-    {
-        public int deathCount;
-        public int killCount;
-        public int id;
-        public ScoreboardInfo(int id, int kill, int death)
-        {
-            this.id = id;
-            killCount = kill;
-            deathCount = death;
-        }
-    }
+    
     
 }

@@ -84,6 +84,7 @@ public class ClientHandle : MonoBehaviour
         int id = packet.ReadInt();
         // make player play reload animation
     }
+    // handle player reloaded END ANIMATION BLALBLALBLA
     public static void PlayerWeaponInfo(Packet packet)
     {
         int bulletLeftInMag = packet.ReadInt();
@@ -100,15 +101,36 @@ public class ClientHandle : MonoBehaviour
     public static void UpdateScoreboard(Packet packet)
     {
         int playerCount = packet.ReadInt();
-        List<Utilities.ScoreboardInfo> scoreboardList = new List<Utilities.ScoreboardInfo>();
+        bool[] isStillInGame = new bool[ScoreManager.scoreboardInfos.Count];
         for (int i = 0; i < playerCount; i++)
         {
             int playerID = packet.ReadInt();
             int killCount = packet.ReadInt();
             int deathCount = packet.ReadInt();
-            scoreboardList.Add(new Utilities.ScoreboardInfo(playerID, killCount, deathCount));
+            bool found = false;
+            for(int j = 0; i < ScoreManager.scoreboardInfos.Count; i++)
+            {
+                ScoreManager.ScoreCard card = ScoreManager.scoreboardInfos[j];
+                if (card.id == playerID)
+                {
+                    card = new ScoreManager.ScoreCard(card.id, killCount, deathCount);
+                    found = true;
+                    isStillInGame[j] = true;
+                    break;
+                }
+            }
+            if(!found)
+            {
+                ScoreManager.instance.AddScore(new ScoreManager.ScoreCard(playerID, killCount, deathCount));
+            }
         }
-        scoreboardList.Sort((player1,player2)=> player1.killCount.CompareTo(player2.killCount));
-        UIManager.instance.UpdateScoreboard(scoreboardList, playerCount);
+        for(int i = 0; i < isStillInGame.Length; i++)
+        {
+            if (!isStillInGame[i])
+            {
+                ScoreManager.instance.DeleteScore(i);
+            }
+        }
+        ScoreManager.instance.UpdateScoreboard();
     }
 }

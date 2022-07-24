@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+
+using System.Linq;
+
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
@@ -10,12 +13,11 @@ public class UIManager : MonoBehaviour
     public GameObject startMenu;
     public InputField usernameField;
     public GameObject gameUI;
+    public GameObject scoreBoard;
     public Slider slider;
     [SerializeField] TextMeshProUGUI healthPoint;
     [SerializeField] TextMeshProUGUI ammoInfo;
 
-    Stack<GameObject> ScoreCards; // store scorecards in this remove add them here
-    private int lastPlayerCountInScoreboard;
     private void Awake()
     {
         if (instance == null)
@@ -53,37 +55,15 @@ public class UIManager : MonoBehaviour
         usernameField.interactable = false;
         Client.instance.ConnectToServer();
     }
-    // when initializing a new client and when a client disconnects, call this method
-    public void UpdateScoreboard(List<Utilities.ScoreboardInfo> scoreboardInfos, int playerCount)
+    
+    public void ShowScoreBoard()
     {
-        if (playerCount > lastPlayerCountInScoreboard)
-        {
-            for(int i = 0; i < playerCount - lastPlayerCountInScoreboard; i++)
-            CreateScoreItem();
-        }
-        else if (playerCount < lastPlayerCountInScoreboard)
-        {
-            for (int i = 0; i < lastPlayerCountInScoreboard - playerCount; i++)
-                DeleteScoreItem();
-        }
-        foreach (Utilities.ScoreboardInfo scoreboardInfo in scoreboardInfos)
-        {
-            // fill info of scorecards yes okay
-            //
-            
-        }
+        scoreBoard.SetActive(true);
     }
-    void CreateScoreItem()
+    public void HideScoreBoard()
     {
-        //instantiate and add to ScoreCards
-        GameObject scoreCard = null;
-        ScoreCards.Push(scoreCard);
+        scoreBoard.SetActive(false);
     }
-    void DeleteScoreItem()
-    {
-        // remove from scorecards and destroy
-
-        Destroy(ScoreCards.Pop());
-
-    }
+    
+    
 }

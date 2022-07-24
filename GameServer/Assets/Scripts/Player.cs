@@ -39,7 +39,8 @@ public class Player : MonoBehaviour
         health = maxHealth;
         inputs = new bool[5];
         activeWeaponID = weapons[0].id;
-        
+     
+
     }
 
     public void FixedUpdate()
@@ -151,10 +152,12 @@ public class Player : MonoBehaviour
     public void IncrementKill()
     {
         killCount++;
+
     }
     public void IncrementDeath()
     {
         deathCount++;
+        ServerSend.UpdateScoreBoard();
     }
     public int GetKill() => killCount;
     public int GetDeath()
@@ -166,11 +169,13 @@ public class Player : MonoBehaviour
     {
         if(health <= 0)
         {
+            
             return;
         }
         health -= damage;
         if(health <= 0f)
         {
+
             Server.clients[byPlayer].player.IncrementKill();
             IncrementDeath();
             health = 0;

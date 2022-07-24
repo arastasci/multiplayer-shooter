@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ServerSend
 {
+    
+
     private static void SendTCPData(int _toClient, Packet _packet)
     {
         _packet.WriteLength();
@@ -73,6 +75,7 @@ public class ServerSend
             SendTCPData(_toClient, packet);
         }
         
+
     }
 
     public static void PlayerPosition(Player player)
@@ -102,6 +105,7 @@ public class ServerSend
             packet.Write(playerID);
             SendTCPDataToAll(packet);
         }
+        // UpdateScoreBoard();
     }
     public static void PlayerHealth(Player player)
     {
@@ -199,13 +203,21 @@ public class ServerSend
     {
         using (Packet packet = new Packet((int)ServerPackets.updateScoreboard))
         {
-            packet.Write(Server.clients.Count);
-            foreach (Client client in Server.clients.Values)
+            int playerCount = 0;
+            foreach(Client client in Server.clients.Values)
             {
+                if (client.player != null) playerCount++;
+            }
+            packet.Write(playerCount);
+            for(int i = 0; i < playerCount; i++)
+            {
+                Client client = Server.clients[i+1];
+                if (client.player == null) continue;
+                Debug.Log(client.id);
                 packet.Write(client.player.id);
                 packet.Write(client.player.GetKill());
                 packet.Write(client.player.GetDeath());
-                
+               
                 // todo: ping player and send info
             }
             SendTCPDataToAll(packet);

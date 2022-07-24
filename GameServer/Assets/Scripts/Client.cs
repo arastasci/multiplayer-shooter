@@ -204,6 +204,9 @@ public class Client
         }
         ServerSend.PlayerWeaponInfo(player.id, player.weapons[player.activeWeaponID]);
         ServerSend.PlayerChangeWeapon(player.id, player.activeWeaponID);
+        ServerSend.UpdateScoreBoard();
+        
+
     }
     private void Disconnect()
     {
@@ -217,7 +220,7 @@ public class Client
 
         tcp.Disconnect();
         udp.Disconnect();
-
+        ServerSend.UpdateScoreBoard();
         ServerSend.PlayerDisconnected(id);
     }
 

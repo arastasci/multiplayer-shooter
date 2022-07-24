@@ -49,6 +49,14 @@ public class PlayerController : MonoBehaviour
         {
             ClientSend.PlayerReload(weapon);
         }
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            UIManager.instance.ShowScoreBoard();
+        }
+        else if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            UIManager.instance.HideScoreBoard();
+        }
     }
     private void SendInputToServer()
     {
