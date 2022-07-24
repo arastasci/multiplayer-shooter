@@ -105,7 +105,6 @@ public class ServerSend
             packet.Write(playerID);
             SendTCPDataToAll(packet);
         }
-        // UpdateScoreBoard();
     }
     public static void PlayerHealth(Player player)
     {
@@ -209,11 +208,13 @@ public class ServerSend
                 if (client.player != null) playerCount++;
             }
             packet.Write(playerCount);
-            for(int i = 0; i < playerCount; i++)
+            for(int i = 1; i <= playerCount; i++)
             {
-                Client client = Server.clients[i+1];
+                Client client = Server.clients[i];
                 if (client.player == null) continue;
                 Debug.Log(client.id);
+                Debug.Log(client.player.GetKill());
+                Debug.Log(client.player.GetDeath());
                 packet.Write(client.player.id);
                 packet.Write(client.player.GetKill());
                 packet.Write(client.player.GetDeath());

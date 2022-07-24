@@ -157,7 +157,7 @@ public class Player : MonoBehaviour
     public void IncrementDeath()
     {
         deathCount++;
-        ServerSend.UpdateScoreBoard();
+        
     }
     public int GetKill() => killCount;
     public int GetDeath()
@@ -178,6 +178,7 @@ public class Player : MonoBehaviour
 
             Server.clients[byPlayer].player.IncrementKill();
             IncrementDeath();
+            ServerSend.UpdateScoreBoard();
             health = 0;
             rb.isKinematic = true;
             transform.position = new Vector3(0f, 25f, 0f);

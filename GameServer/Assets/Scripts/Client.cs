@@ -220,8 +220,9 @@ public class Client
 
         tcp.Disconnect();
         udp.Disconnect();
-        ServerSend.UpdateScoreBoard();
+        
         ServerSend.PlayerDisconnected(id);
+        
     }
 
 }

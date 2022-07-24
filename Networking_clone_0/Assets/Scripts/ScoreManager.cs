@@ -9,6 +9,7 @@ public class ScoreManager : MonoBehaviour
     public GameObject rowUIPrefab;
     public static ScoreManager instance;
     public ScoreUI scoreUI;
+    public GameObject content;
     private void Awake()
     {
         if(instance == null)
@@ -43,10 +44,15 @@ public class ScoreManager : MonoBehaviour
     }
     public void DeleteScore(int index)
     {
-        scoreboardInfos.RemoveAt(index);
+        scoreboardInfos.RemoveAt(index-1);
+        Destroy(content.transform.GetChild(index-1).gameObject);
+        ScoreUI.rows.Remove(index);
+        UpdateScoreboard();
     }
     public void UpdateScoreboard()
     {
+
+
         ScoreCard[] scoreboardArr = GetScoreboard().ToArray();
 
         scoreUI.DrawScoreboard(scoreboardArr);

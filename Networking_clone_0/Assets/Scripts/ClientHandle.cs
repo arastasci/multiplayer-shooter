@@ -45,6 +45,8 @@ public class ClientHandle : MonoBehaviour
         int id = packet.ReadInt();
         Destroy(GameManager.players[id].gameObject);
         GameManager.players.Remove(id);
+        ScoreManager.instance.DeleteScore(id);
+        ScoreManager.instance.UpdateScoreboard();
     }
 
     public static void PlayerHealth(Packet packet)
@@ -110,10 +112,9 @@ public class ClientHandle : MonoBehaviour
             bool found = false;
             for(int j = 0; i < ScoreManager.scoreboardInfos.Count; i++)
             {
-                ScoreManager.ScoreCard card = ScoreManager.scoreboardInfos[j];
-                if (card.id == playerID)
+                if (ScoreManager.scoreboardInfos[j].id == playerID)
                 {
-                    card = new ScoreManager.ScoreCard(card.id, killCount, deathCount);
+                    ScoreManager.scoreboardInfos[j] = new ScoreManager.ScoreCard(ScoreManager.scoreboardInfos[j].id, killCount, deathCount);
                     found = true;
                     isStillInGame[j] = true;
                     break;
