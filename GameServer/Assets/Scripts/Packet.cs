@@ -16,6 +16,8 @@ public enum ServerPackets
     playerHealth,
     playerRespawned,
     createItemSpawner,
+    itemSpawned,
+    itemPickedUp,
     projectileExploded,
     projectileLaunched,
     projectilePosition,
@@ -23,8 +25,8 @@ public enum ServerPackets
     playerWeaponInfo,
     playerChangeWeapon,
     playerReloaded,
-    updateScoreboard
-    
+    updateScoreboard,
+
 }
 
 /// <summary>Sent from client to server.</summary>

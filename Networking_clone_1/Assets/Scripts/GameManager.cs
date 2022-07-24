@@ -9,11 +9,13 @@ public class GameManager : MonoBehaviour
     public static Dictionary<int, PlayerManager> players = new Dictionary<int, PlayerManager>();
     public static Dictionary<int, ProjectileManager> projectiles = new Dictionary<int, ProjectileManager>();
 
+    public static Dictionary<int, ItemSpawner> itemSpawners = new Dictionary<int, ItemSpawner>();
     
 
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
     public GameObject projectilePrefab;
+    public GameObject itemSpawnerPrefab;
     private void Awake()
     {
         if (instance == null)
@@ -62,5 +64,13 @@ public class GameManager : MonoBehaviour
     public void UpdateProjectilePosition(int id, Vector3 position)
     {
         projectiles[id].transform.position = position;
+    }
+    
+    public void CreateItemSpawner(int spawnerID, Vector3 position, int itemType ,bool hasItem)
+    {
+        GameObject spawner = Instantiate(itemSpawnerPrefab, position, itemSpawnerPrefab.transform.rotation);
+        spawner.GetComponent<ItemSpawner>().Initialize(spawnerID,itemType,hasItem);
+        itemSpawners.Add(spawnerID, spawner.GetComponent<ItemSpawner>());
+
     }
 }

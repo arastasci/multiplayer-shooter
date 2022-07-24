@@ -116,4 +116,28 @@ public class ClientHandle : MonoBehaviour
         ScoreManager.instance.UpdateScoreboard();
 
     }
+    public static void CreateItemSpawner(Packet packet)
+    {
+        int spawnerID = packet.ReadInt();
+        int itemType = packet.ReadInt();
+        Vector3 position = packet.ReadVector3();
+        bool hasItem = packet.ReadBool();
+
+        GameManager.instance.CreateItemSpawner(spawnerID, position, itemType, hasItem);
+        //packet.Write(itemType);
+        //packet.Write(position);
+        //packet.Write(hasItem);
+    }
+    public static void ItemSpawned(Packet packet)
+    {
+        int spawnerID = packet.ReadInt();
+        int itemType = packet.ReadInt();
+        GameManager.itemSpawners[spawnerID].ItemSpawned(itemType);
+    }
+    public static void ItemPickedUp(Packet packet)
+    {
+        int spawnerID = packet.ReadInt();
+        int byPlayer = packet.ReadInt();
+        GameManager.itemSpawners[spawnerID].ItemPickedUp();
+    }
 }

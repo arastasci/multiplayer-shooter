@@ -15,18 +15,20 @@ public class Player : MonoBehaviour
     public float gravity = -9.81f;
     public float moveSpeed = 5f;
     public float jumpspeed = 5f;
+    float speedMultiplier = 1f;
     public int health;
     public int maxHealth;
 
     public float projectileForceMultiplier = 10f;
 
-    public int itemAmount;
-    public int maxItemAmount;
+
     private bool[] inputs;
 
     private int killCount = 0;
     private int deathCount = 0;
     public float maxVelocity = 4f;
+    bool hasItem = false;
+
 
     public Weapon[] weapons = new Weapon[2];
 
@@ -78,12 +80,12 @@ public class Player : MonoBehaviour
         if (planarVelocity < maxVelocity)
         {
             moveDirection = transform.right * inputDirection.x + transform.forward * inputDirection.y;
-            moveDirection *= moveSpeed;
+            moveDirection *= moveSpeed * speedMultiplier;
         }
 
         if (isGrounded && inputs[4])
         {
-            moveDirection += transform.up * jumpspeed;
+            moveDirection += transform.up * jumpspeed * speedMultiplier;
             isGrounded = false;
         }
         rb.AddForce(moveDirection, ForceMode.VelocityChange);
@@ -189,6 +191,24 @@ public class Player : MonoBehaviour
         ServerSend.PlayerHealth(this);
     }
 
+    void GetHealthPack()
+    {
+        health += 40;
+        if (health > maxHealth) health = maxHealth;
+        ServerSend.PlayerHealth(this);
+        
+    }
+    void GetSpeedBoost()
+    {
+        speedMultiplier = 1.75f;
+        StartCoroutine(SpeedBoostEnded());
+    }
+    IEnumerator SpeedBoostEnded()
+    {
+        yield return new WaitForSeconds(5f);
+        speedMultiplier = 1f;
+        hasItem = false;
+    }
     private IEnumerator Respawn()
     {
         yield return new WaitForSeconds(5f);
@@ -197,11 +217,23 @@ public class Player : MonoBehaviour
         ServerSend.PlayerRespawned(this);
     }
     
-    public bool AttemptPickupItem()
+    
+    public bool AttemptPickupItem(int itemType)
     {
-        if (itemAmount >= maxHealth) return false;
+        if (hasItem) return false;
 
-        itemAmount++;
+        hasItem = true;
+        switch (itemType)
+        {
+            case 0:
+                GetHealthPack();
+                hasItem = false;
+                break;
+            case 1:
+                GetSpeedBoost();
+                break;
+
+        }
         return true;
     }
     

@@ -202,10 +202,16 @@ public class Client
                 ServerSend.SpawnPlayer(client.id, player);
             }
         }
+        foreach(ItemSpawner itemSpawner in ItemSpawner.spawners.Values)
+        {
+            ServerSend.CreateItemSpawner(id, itemSpawner.spawnerID, (int)itemSpawner.itemType, itemSpawner.transform.position, itemSpawner.hasItem);
+        }
+
         ServerSend.PlayerWeaponInfo(player.id, player.weapons[player.activeWeaponID]);
         ServerSend.PlayerChangeWeapon(player.id, player.activeWeaponID);
         ServerSend.UpdateScoreBoard();
         
+
 
     }
     private void Disconnect()

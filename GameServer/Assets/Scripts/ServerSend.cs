@@ -153,11 +153,12 @@ public class ServerSend
             SendUDPDataToAll(packet);
         }
     }
-    public static void CreateItemSpawner(int toClient, int spawnerID, Vector3 position, bool hasItem)
+    public static void CreateItemSpawner(int toClient, int spawnerID,int itemType, Vector3 position, bool hasItem)
     {
         using(Packet packet = new Packet((int)ServerPackets.createItemSpawner))
         {
             packet.Write(spawnerID);
+            packet.Write(itemType);
             packet.Write(position);
             packet.Write(hasItem);
             SendTCPData(toClient, packet);
@@ -221,6 +222,25 @@ public class ServerSend
                
                 // todo: ping player and send info
             }
+            SendTCPDataToAll(packet);
+        }
+    }
+    
+    public static void ItemSpawned(int spawnerID, int itemType)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.itemSpawned))
+        {
+            packet.Write(spawnerID);
+            packet.Write(itemType);
+            SendTCPDataToAll(packet);
+        }
+    }
+    public static void ItemPickedUp(int spawnerID, int byPlayer)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.itemPickedUp))
+        {
+            packet.Write(spawnerID);
+            packet.Write(byPlayer);
             SendTCPDataToAll(packet);
         }
     }
