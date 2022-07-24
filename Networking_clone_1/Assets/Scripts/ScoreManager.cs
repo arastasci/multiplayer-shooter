@@ -2,63 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-
+using System;
 public class ScoreManager : MonoBehaviour 
 {
 
     public GameObject rowUIPrefab;
     public static ScoreManager instance;
-    public ScoreUI scoreUI;
-    public GameObject content;
+    public Transform content;
+
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null) instance = this;   
+    }
+    public  void UpdateScoreboard()
+    {
+        List<PlayerManager> playersList =  GetPlayerManagers().ToList();  
+        for(int i = 0; i < playersList.Count; i++)
         {
-            instance = this;
+            PlayerManager p = playersList[i];
+            if(p.score.row == null)
+            p.score.row = Instantiate(rowUIPrefab, content).GetComponent<Row>();
+            p.score.row.GetComponent<RectTransform>().SetAsLastSibling();
+            SetRow(p, i );
         }
+
     }
-    //public struct ScoreCard
-    //{
-    //    public int deathCount;
-    //    public int killCount;
-    //    public int id;
-
-    //    public ScoreCard(int id, int kill, int death)
-    //    {
-    //        this.id = id;
-    //        killCount = kill;
-    //        deathCount = death;
-
-    //    }
-
-    //}
-    public static List<ScoreData> scoreDatas = new List<ScoreData>();
-
-    public static IEnumerable<ScoreData> GetScoreboard()
+    public void DeleteRow(int id)
     {
-        return scoreDatas.OrderByDescending(x => x.killCount);
-    }
-    public void AddData(ScoreData scoreData)
-    {
-        scoreDatas.Add(scoreData);
-        Debug.Log(scoreData.id + " is added to the scoreboardArr");
-    }
-    public void DeleteScore(int index)
-    {
-        Debug.Log("deleting score of " + index);
-        Debug.Log("destroying scoredata with id " + scoreDatas.Where(scoreData => scoreData.id == index).FirstOrDefault().id);
-        GameObject imStupid = scoreDatas[index].row.gameObject;
-        scoreDatas.Remove(scoreDatas.Where(scoreData => scoreData.id == index).FirstOrDefault());
-        Destroy(imStupid);
-
+        Destroy(GameManager.players[id].score.row.gameObject);
         UpdateScoreboard();
     }
-    public void UpdateScoreboard()
+    void SetRow(PlayerManager player, int i)
     {
-        
-        ScoreData[] scoreboardArr = GetScoreboard().ToArray();
-        Debug.Log( "scorebordarr length"+scoreboardArr.Length);
-        scoreUI.DrawScoreboard(scoreboardArr);
+        Row row = player.score.row;
+        row.rank.text = (i + 1).ToString();
+        row.userName.text = player.username;
+        row.killCount.text = player.score.killCount.ToString();
+        row.deathCount.text = player.score.deathCount.ToString();
     }
-
+    IEnumerable<PlayerManager> GetPlayerManagers()
+    {
+        return GameManager.players.Values.OrderByDescending(x=> x.score.killCount);
+    }
 }

@@ -44,9 +44,11 @@ public class ClientHandle : MonoBehaviour
     {
         Debug.Log("disconnecting;");
         int id = packet.ReadInt();
+        ScoreManager.instance.DeleteRow(id);
+
         Destroy(GameManager.players[id].gameObject);
         GameManager.players.Remove(id);
-        ScoreManager.instance.DeleteScore(id);
+
     }
 
     public static void PlayerHealth(Packet packet)
@@ -104,40 +106,14 @@ public class ClientHandle : MonoBehaviour
     {
         int playerCount = packet.ReadInt();
         //bool[] isStillInGame = new bool[ScoreManager.scoreboardInfos.Count];
-        for (int i = 1; i <= playerCount; i++)
+        for (int i = 1; i <= GameManager.players.Count; i++)
         {
             int playerID = packet.ReadInt();
             int killCount = packet.ReadInt();
             int deathCount = packet.ReadInt();
-            bool found = false;
-
-
-            
-
-            for (int j = 0; i < ScoreManager.scoreDatas.Count; i++)
-            {
-                if (ScoreManager.scoreDatas[j].id == playerID)
-                {
-                    ScoreManager.scoreDatas[j] = new ScoreData(playerID, killCount, deathCount, ScoreManager.scoreDatas[j].row);
-                    found = true;
-                    //isStillInGame[j] = true;
-                    break;
-                }
-            }
-            if (!found)
-            {
-                Debug.Log("adding score");
-                ScoreManager.instance.AddData(new ScoreData(playerID, killCount, deathCount));
-            }
+            GameManager.players[playerID].score.SetKillDeath(killCount, deathCount);
         }
-        //for (int i = 0; i < isStillInGame.Length; i++)
-        //{
-        //    if (!isStillInGame[i])
-        //    {
-        //        ScoreManager.instance.DeleteScore(i);
-        //    }
-        //}
-        Debug.Log("motion to update the scoreboard");
         ScoreManager.instance.UpdateScoreboard();
+
     }
 }

@@ -10,6 +10,9 @@ public class PlayerManager : MonoBehaviour
     public int maxHealth;
     public MeshRenderer model;
     [SerializeField] GameObject[] weapons = new GameObject[2];
+
+    public ScoreData score;
+
     int activeWeapon = 1;
     public void Initialize(int id, string userName)
     {
@@ -21,6 +24,7 @@ public class PlayerManager : MonoBehaviour
             UIManager.instance.slider.maxValue = maxHealth;
             UIManager.instance.UpdateHealth(maxHealth);
         }
+        score = new ScoreData(id, 0, 0);
     }
     public void SetHealth(int health)
     {

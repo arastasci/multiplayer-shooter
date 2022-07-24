@@ -21,6 +21,11 @@ public class ScoreData {
         this.row = row;
         Debug.Log(this.row == null);
     }
+    public void SetKillDeath(int kill, int death)
+    {
+        killCount = kill;
+        deathCount = death;
+    }
     public void SetRow(Row row)
     {
         this.row = row;
