@@ -42,11 +42,11 @@ public class ClientHandle : MonoBehaviour
 
     public static void PlayerDisconnected(Packet packet)
     {
+        Debug.Log("disconnecting;");
         int id = packet.ReadInt();
         Destroy(GameManager.players[id].gameObject);
         GameManager.players.Remove(id);
         ScoreManager.instance.DeleteScore(id);
-        ScoreManager.instance.UpdateScoreboard();
     }
 
     public static void PlayerHealth(Packet packet)
@@ -103,35 +103,41 @@ public class ClientHandle : MonoBehaviour
     public static void UpdateScoreboard(Packet packet)
     {
         int playerCount = packet.ReadInt();
-        bool[] isStillInGame = new bool[ScoreManager.scoreboardInfos.Count];
-        for (int i = 0; i < playerCount; i++)
+        //bool[] isStillInGame = new bool[ScoreManager.scoreboardInfos.Count];
+        for (int i = 1; i <= playerCount; i++)
         {
             int playerID = packet.ReadInt();
             int killCount = packet.ReadInt();
             int deathCount = packet.ReadInt();
             bool found = false;
-            for(int j = 0; i < ScoreManager.scoreboardInfos.Count; i++)
+
+
+            
+
+            for (int j = 0; i < ScoreManager.scoreDatas.Count; i++)
             {
-                if (ScoreManager.scoreboardInfos[j].id == playerID)
+                if (ScoreManager.scoreDatas[j].id == playerID)
                 {
-                    ScoreManager.scoreboardInfos[j] = new ScoreManager.ScoreCard(ScoreManager.scoreboardInfos[j].id, killCount, deathCount);
+                    ScoreManager.scoreDatas[j] = new ScoreData(playerID, killCount, deathCount, ScoreManager.scoreDatas[j].row);
                     found = true;
-                    isStillInGame[j] = true;
+                    //isStillInGame[j] = true;
                     break;
                 }
             }
-            if(!found)
+            if (!found)
             {
-                ScoreManager.instance.AddScore(new ScoreManager.ScoreCard(playerID, killCount, deathCount));
+                Debug.Log("adding score");
+                ScoreManager.instance.AddData(new ScoreData(playerID, killCount, deathCount));
             }
         }
-        for(int i = 0; i < isStillInGame.Length; i++)
-        {
-            if (!isStillInGame[i])
-            {
-                ScoreManager.instance.DeleteScore(i);
-            }
-        }
+        //for (int i = 0; i < isStillInGame.Length; i++)
+        //{
+        //    if (!isStillInGame[i])
+        //    {
+        //        ScoreManager.instance.DeleteScore(i);
+        //    }
+        //}
+        Debug.Log("motion to update the scoreboard");
         ScoreManager.instance.UpdateScoreboard();
     }
 }

@@ -10,4 +10,5 @@ public class Row : MonoBehaviour
     public TextMeshProUGUI killCount;
     public TextMeshProUGUI deathCount;
     public TextMeshProUGUI ping;
+
 }

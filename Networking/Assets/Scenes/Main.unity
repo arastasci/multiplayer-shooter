@@ -3058,3 +3058,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rowUIPrefab: {fileID: 5522739386665928331, guid: 88705d201ea36e04596fc5acec476725, type: 3}
   scoreUI: {fileID: 586019628}
+  content: {fileID: 586019624}
