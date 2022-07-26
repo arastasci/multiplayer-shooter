@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using System;
 using System.Linq;
 
 public class UIManager : MonoBehaviour
@@ -17,7 +16,10 @@ public class UIManager : MonoBehaviour
     public Slider slider;
     [SerializeField] TextMeshProUGUI healthPoint;
     [SerializeField] TextMeshProUGUI ammoInfo;
+    [SerializeField] GameObject hud;
+    [SerializeField] TextMeshProUGUI killerDisplay;
 
+    string[] killStrings = { "pwned you!","chicago sunroof'ed you","married your mother"};
     private void Awake()
     {
         if (instance == null)
@@ -32,10 +34,7 @@ public class UIManager : MonoBehaviour
         
         
     }
-    private void Start()
-    {
-        
-    }
+   
 
     public void UpdateHealth(int health)
     {
@@ -65,5 +64,12 @@ public class UIManager : MonoBehaviour
         scoreBoard.SetActive(false);
     }
     
+    public void DisplayKiller(string killerName)
+    {
+        hud.SetActive(false);
+        killerDisplay.gameObject.SetActive(true);
+        killerDisplay.text = String.Format("{0} {1}",killerName,)
+
+    }
     
 }

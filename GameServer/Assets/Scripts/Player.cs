@@ -147,7 +147,7 @@ public class Player : MonoBehaviour
     public void SetActiveWeapon(int weaponID)
     {
         activeWeaponID = weaponID;
-        ServerSend.PlayerChangeWeapon(id, weaponID);
+        ServerSend.PlayerChangeWeapon(-1,id, weaponID);
         ServerSend.PlayerWeaponInfo(id, weapons[weaponID]);
     }
 
@@ -183,19 +183,19 @@ public class Player : MonoBehaviour
             ServerSend.UpdateScoreBoard();
             health = 0;
             rb.isKinematic = true;
-            transform.position = new Vector3(0f, 25f, 0f);
-            ServerSend.PlayerPosition(this);
+            
+            
             StartCoroutine(Respawn());
         }
 
-        ServerSend.PlayerHealth(this);
+        ServerSend.PlayerHealth(this, byPlayer);
     }
 
     void GetHealthPack()
     {
         health += 40;
         if (health > maxHealth) health = maxHealth;
-        ServerSend.PlayerHealth(this);
+        ServerSend.PlayerHealth(this, -1);
         
     }
     void GetSpeedBoost()
@@ -212,6 +212,8 @@ public class Player : MonoBehaviour
     private IEnumerator Respawn()
     {
         yield return new WaitForSeconds(5f);
+        transform.position = NetworkManager.instance.FindSpawnPosition();
+        ServerSend.PlayerPosition(this);
         health = maxHealth;
         rb.isKinematic = false;
         ServerSend.PlayerRespawned(this);

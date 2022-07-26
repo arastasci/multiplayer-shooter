@@ -10,7 +10,8 @@ public class PlayerManager : MonoBehaviour
     public int maxHealth;
     public MeshRenderer model;
     [SerializeField] GameObject[] weapons = new GameObject[2];
-
+    PlayerController playerController;
+    CamFollowKiller camFollowKiller;
     public ScoreData score;
 
     int activeWeapon = 1;
@@ -23,31 +24,41 @@ public class PlayerManager : MonoBehaviour
         {
             UIManager.instance.slider.maxValue = maxHealth;
             UIManager.instance.UpdateHealth(maxHealth);
+            playerController = GetComponent<PlayerController>();
+            camFollowKiller = GetComponent<CamFollowKiller>();
         }
         score = new ScoreData(id, 0, 0);
     }
-    public void SetHealth(int health)
+    public void SetHealth(int health, int byPlayer)
     {
         this.health = health;
         if(id == Client.instance.myId)
         {
-
             UIManager.instance.UpdateHealth(health);
         }
         if(health <= 0)
         {
-            Die();
+            Die(byPlayer);
         }
     }
 
-    public void Die()
+    public void Die(int byPlayer)
     {
         model.enabled = false;
+        weapons[activeWeapon].SetActive(false);
+        playerController.enabled = false;
+        camFollowKiller.enabled = true;
+        // make cam follow killer CM
+        UI.instance. GameManager.players[byPlayer].username
+
     }
     public void Respawn()
     {
         model.enabled = true;
-        SetHealth(maxHealth);
+        weapons[activeWeapon].SetActive(true);
+        playerController.enabled = true;
+        camFollowKiller.enabled = false;
+        SetHealth(maxHealth, id); // id totally useless here, should refactor the code later
     }
 
     public void SetActiveWeapon(int id)

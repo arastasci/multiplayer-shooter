@@ -208,7 +208,14 @@ public class Client
         }
 
         ServerSend.PlayerWeaponInfo(player.id, player.weapons[player.activeWeaponID]);
-        ServerSend.PlayerChangeWeapon(player.id, player.activeWeaponID);
+        foreach(Client client in Server.clients.Values)
+        {
+            if(client.player != null)
+            {
+                ServerSend.PlayerChangeWeapon(id, client.player.id, player.activeWeaponID);
+            }
+        }
+        ServerSend.PlayerChangeWeapon(-1, id, player.activeWeaponID);
         ServerSend.UpdateScoreBoard();
         
 

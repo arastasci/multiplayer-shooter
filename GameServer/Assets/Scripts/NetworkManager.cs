@@ -9,6 +9,8 @@ public class NetworkManager : MonoBehaviour
     public int nextProjectileID;
     public float projectileForceMultiplier = 10f;
     public GameObject playerPrefab;
+
+    public Transform[] spawnAreas;
     private void Awake()
     {
         if(instance == null)
@@ -20,6 +22,7 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("instance already exists, destroying object.");
             Destroy(this);
         }
+        
     }
     private void Start()
     {
@@ -33,8 +36,19 @@ public class NetworkManager : MonoBehaviour
         Server.Stop();
     }
 
+    public Vector3 FindSpawnPosition()
+    {
+        Transform playerTransform = spawnAreas[(int)Random.Range(0, spawnAreas.Length)].transform;
+        Vector3 scale = playerTransform.localScale * 10;
+        float x = Random.Range(-scale.x / 2, scale.x / 2);
+        float z = Random.Range(-scale.z / 2, scale.z / 2);
+        Vector3 localSpawnPoint = new Vector3(x, 2f, z);
+        Vector3 globalSpawnPoint = localSpawnPoint + playerTransform.position;
+        return globalSpawnPoint;
+    }
     public Player InstantiatePlayer()
     {
-        return Instantiate(playerPrefab, new Vector3(0,2f,0), Quaternion.identity).GetComponent<Player>();
+        
+        return Instantiate(playerPrefab, FindSpawnPosition() , Quaternion.identity).GetComponent<Player>();
     }
 }

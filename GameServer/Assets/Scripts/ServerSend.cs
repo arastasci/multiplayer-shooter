@@ -106,12 +106,13 @@ public class ServerSend
             SendTCPDataToAll(packet);
         }
     }
-    public static void PlayerHealth(Player player)
+    public static void PlayerHealth(Player player, int byPlayer)
     {
         using(Packet packet = new Packet((int)ServerPackets.playerHealth))
         {
             packet.Write(player.id);
             packet.Write(player.health);
+            packet.Write(byPlayer);
             SendTCPDataToAll(packet);
         }
     }
@@ -190,15 +191,23 @@ public class ServerSend
             SendTCPData(ofClient, packet);
         }
     }
-    public static void PlayerChangeWeapon(int playerID, int weaponID)
+    public static void PlayerChangeWeapon(int toClient,int playerID,int weaponID)
     {
         using (Packet packet = new Packet((int)ServerPackets.playerChangeWeapon))
         {
             packet.Write(playerID);
             packet.Write(weaponID);
-            SendTCPDataToAll(packet);
+            if(toClient == -1)
+            {
+                SendTCPDataToAll(packet);
+            }
+            else
+            {
+                SendTCPData(toClient, packet);
+            }
         }
     }
+    
     public static void UpdateScoreBoard()
     {
         using (Packet packet = new Packet((int)ServerPackets.updateScoreboard))

@@ -55,7 +55,9 @@ public class ClientHandle : MonoBehaviour
     {
         int id = packet.ReadInt();
         int health = packet.ReadInt();
-        GameManager.players[id].SetHealth(health);
+        int byPlayer = packet.ReadInt();
+
+        GameManager.players[id].SetHealth(health, byPlayer);
     }
 
     public static void PlayerRespawned(Packet packet)
