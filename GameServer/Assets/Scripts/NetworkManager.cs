@@ -38,7 +38,7 @@ public class NetworkManager : MonoBehaviour
 
     public Vector3 FindSpawnPosition()
     {
-        Transform playerTransform = spawnAreas[(int)Random.Range(0, spawnAreas.Length)].transform;
+        Transform playerTransform = spawnAreas[Random.Range(0, spawnAreas.Length)].transform;
         Vector3 scale = playerTransform.localScale * 10;
         float x = Random.Range(-scale.x / 2, scale.x / 2);
         float z = Random.Range(-scale.z / 2, scale.z / 2);

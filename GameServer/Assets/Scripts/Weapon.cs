@@ -38,14 +38,16 @@ public class Weapon : MonoBehaviour
     public void DecrementBullet(int playerID)
     {
         if (!canShoot) return;
-        bulletLeftInMag--;
-        StartCoroutine(ShootCooldown());
-        if(bulletLeftInMag == 0)
+        
+        if(bulletLeftInMag == 0 )
         {
             canShoot = false;
 
             Reload(playerID);
+            return;
         }
+        bulletLeftInMag--;
+        StartCoroutine(ShootCooldown());
         //if (bulletLeftInMag > 0)
         //{
         //    bulletLeftInMag--;

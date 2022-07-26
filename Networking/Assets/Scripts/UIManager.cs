@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject hud;
     [SerializeField] TextMeshProUGUI killerDisplay;
 
-    string[] killStrings = { "pwned you!","chicago sunroof'ed you","married your mother"};
+    string[] killStrings = { "pwned you","chicago sunroof'ed you","married your mother" };
     private void Awake()
     {
         if (instance == null)
@@ -67,9 +67,16 @@ public class UIManager : MonoBehaviour
     public void DisplayKiller(string killerName)
     {
         hud.SetActive(false);
-        killerDisplay.gameObject.SetActive(true);
-        killerDisplay.text = String.Format("{0} {1}",killerName,)
-
+        killerDisplay.enabled = true;
+        killerDisplay.text = String.Format("{0} {1}!", killerName,killStrings[UnityEngine.Random.Range(0,killStrings.Length)]);
+        
+    }
+    public void HideKiller()
+    {
+        hud.SetActive(true);
+        killerDisplay.text = "";
+        killerDisplay.enabled = false;
+        
     }
     
 }

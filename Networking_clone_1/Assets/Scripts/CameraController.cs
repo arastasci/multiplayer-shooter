@@ -10,21 +10,43 @@ public class CameraController : MonoBehaviour
     private float verticalRotation;
     private float horizontalRotation;
     private bool cursorLocked = false;
+    Vector3 basePosition;
+    PlayerManager killer;
+    [SerializeField] Vector3 killCamOffset = new Vector3(0,1f,2f);
+    [SerializeField] Quaternion killCamAngle = Quaternion.Euler(-30, 0, 0);
     private void Start()
     {
         verticalRotation = transform.localEulerAngles.x;
         horizontalRotation = player.transform.eulerAngles.y;
+        basePosition = transform.localPosition;
     }
 
     private void Update()
     {
+
         if(Input.GetKeyDown(KeyCode.Escape)) ToggleCursorMode();
         if (cursorLocked)
         {
             Look();
         }
+
         
         Debug.DrawRay(transform.position, transform.forward * 2, Color.red);
+    }
+
+    public void LockToKiller(int playerID)
+    {
+        killer = GameManager.players[playerID];
+        transform.parent = killer.transform;
+        transform.localRotation = killCamAngle;
+        transform.localPosition = killCamOffset;
+    }
+    public void GoBackToPlayer()
+    {
+        killer = null;
+        transform.parent = player.transform;
+        transform.localRotation = Quaternion.identity;
+        transform.localPosition = basePosition;
     }
 
     private void Look()

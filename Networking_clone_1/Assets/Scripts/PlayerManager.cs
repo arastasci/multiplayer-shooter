@@ -11,6 +11,7 @@ public class PlayerManager : MonoBehaviour
     public MeshRenderer model;
     [SerializeField] GameObject[] weapons = new GameObject[2];
     PlayerController playerController;
+    CameraController cameraController;
     CamFollowKiller camFollowKiller;
     public ScoreData score;
 
@@ -25,7 +26,7 @@ public class PlayerManager : MonoBehaviour
             UIManager.instance.slider.maxValue = maxHealth;
             UIManager.instance.UpdateHealth(maxHealth);
             playerController = GetComponent<PlayerController>();
-            camFollowKiller = GetComponent<CamFollowKiller>();
+            cameraController = transform.Find("Camera").GetComponent<CameraController>();
         }
         score = new ScoreData(id, 0, 0);
     }
@@ -46,19 +47,28 @@ public class PlayerManager : MonoBehaviour
     {
         model.enabled = false;
         weapons[activeWeapon].SetActive(false);
-        playerController.enabled = false;
-        camFollowKiller.enabled = true;
-        // make cam follow killer CM
-        UI.instance. GameManager.players[byPlayer].username
+        if(id == Client.instance.myId)
+        {
+            playerController.enabled = false;
+            cameraController.LockToKiller(byPlayer);
+            // make cam follow killer CM
+            UIManager.instance.DisplayKiller(GameManager.players[byPlayer].username);
+        }
+        
 
     }
     public void Respawn()
     {
         model.enabled = true;
         weapons[activeWeapon].SetActive(true);
-        playerController.enabled = true;
-        camFollowKiller.enabled = false;
-        SetHealth(maxHealth, id); // id totally useless here, should refactor the code later
+        if(id == Client.instance.myId)
+        {
+            playerController.enabled = true;
+            cameraController.GoBackToPlayer();
+            SetHealth(maxHealth, id); // id totally useless here, should refactor the code later
+            UIManager.instance.HideKiller();
+        }
+        
     }
 
     public void SetActiveWeapon(int id)
