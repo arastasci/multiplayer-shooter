@@ -15,7 +15,8 @@ public class Player : MonoBehaviour
     public float gravity = -9.81f;
     public float moveSpeed = 5f;
     public float jumpspeed = 5f;
-    float speedMultiplier = 1f;
+    float moveMultiplier = 1f;
+    float jumpMultiplier = 1f;
     public int health;
     public int maxHealth;
     public float projectileForceMultiplier = 10f;
@@ -33,6 +34,7 @@ public class Player : MonoBehaviour
     public Weapon[] weapons = new Weapon[2];
     [HideInInspector] public int activeWeaponID;
 
+    public bool affectedByExplosion = false;
     public void Initialize(int id, string username)
     {
         this.id = id;
@@ -72,34 +74,48 @@ public class Player : MonoBehaviour
         if (inputDirection.magnitude == 0)
         {
             isMoving = false;
+            Debug.Log(planarSpeed);
         }
         else
         {
             isMoving = true;
         }
-        if (!isMoving && planarSpeed > 0.5f)
+        if (!isMoving && planarSpeed > 0f)
         {
             if (isGrounded)
             {
                 moveDirection = -rb.velocity.normalized * groundDragForce;
+                Debug.Log("ground force");
+
             }
             else
             {
+                Debug.Log("air force");
                 moveDirection = -rb.velocity.normalized * airDragForce;
+            }
+            if(moveDirection.magnitude > velocity.magnitude)
+            {
+                moveDirection = Vector3.zero;
+                rb.velocity = Vector3.zero;
             }
         }
 
         debug = planarSpeed > maxSpeed;
         if (!debug)
         {
+            Debug.Log("planar speed is smaller than maxspeed");
             moveDirection = transform.right * inputDirection.x + transform.forward * inputDirection.y;
-            moveDirection *= moveSpeed * speedMultiplier;
+            moveDirection *= moveSpeed * moveMultiplier;
         }
+        //else if(!affectedByExplosion)
+        //{
+        //    rb.velocity = new Vector3(velocity.normalized.x * maxSpeed, velocity.y, velocity.normalized.z * maxSpeed);
+        //}
         
 
         if (isGrounded && isJumping)
         {
-            moveDirection += transform.up * jumpspeed * speedMultiplier;
+            moveDirection += transform.up * jumpspeed * jumpMultiplier;
             isGrounded = false;
         }
         rb.AddForce(moveDirection, ForceMode.VelocityChange);
@@ -220,13 +236,15 @@ public class Player : MonoBehaviour
     }
     void GetSpeedBoost()
     {
-        speedMultiplier = 1.75f;
+        moveMultiplier = 1.75f;
+        jumpMultiplier = 1.15f;
         StartCoroutine(SpeedBoostEnded());
     }
     IEnumerator SpeedBoostEnded()
     {
         yield return new WaitForSeconds(5f);
-        speedMultiplier = 1f;
+        moveMultiplier = 1f;
+        jumpMultiplier = 1f;
         hasItem = false;
     }
     private IEnumerator Respawn()
@@ -263,7 +281,7 @@ public class Player : MonoBehaviour
 
     public LayerMask whatIsGround;
     public float maxSlopeAngle = 45f;
-
+    
     private bool IsFloor(Vector3 normal)
     {
         float angle = Vector3.Angle(normal, Vector3.up);
@@ -281,6 +299,7 @@ public class Player : MonoBehaviour
             Vector3 normal = collision.contacts[i].normal;
             if (IsFloor(normal))
             {
+                affectedByExplosion = false;
                 isGrounded = true;
                 break;
             }

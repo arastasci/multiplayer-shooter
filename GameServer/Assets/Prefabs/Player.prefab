@@ -124,14 +124,15 @@ MonoBehaviour:
   health: 100
   maxHealth: 100
   projectileForceMultiplier: 10
-  groundDragForce: 0
-  airDragForce: 0
+  groundDragForce: 5
+  airDragForce: 3
   planarSpeed: 0
   maxSpeed: 7
   weapons:
   - {fileID: 3150059016676306759}
   - {fileID: 1344876290118467454}
   activeWeaponID: 0
+  affectedByExplosion: 0
   debug: 0
   whatIsGround:
     serializedVersion: 2
