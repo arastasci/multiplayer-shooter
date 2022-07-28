@@ -8,6 +8,7 @@ public struct PlayerInput
     public float z;
     public float x;
     public bool isJumping;
+    public bool isCrouching;
 }
 public class PlayerController : MonoBehaviour
 {
@@ -71,6 +72,7 @@ public class PlayerController : MonoBehaviour
         input.z = Input.GetAxisRaw("Vertical");
         input.x = Input.GetAxisRaw("Horizontal");
         input.isJumping = Input.GetKey(KeyCode.Space);
+        input.isCrouching = Input.GetKey(KeyCode.LeftControl);
         ClientSend.PlayerGetInput(input);
     }
 }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7776138940853614045}
   - component: {fileID: 43446430326675653}
   - component: {fileID: 7346563564494385454}
+  - component: {fileID: 5517461445132474578}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -126,6 +127,7 @@ MonoBehaviour:
   projectileForceMultiplier: 10
   groundDragForce: 5
   airDragForce: 3
+  crouchDragForce: 1
   planarSpeed: 0
   maxSpeed: 7
   weapons:
@@ -134,10 +136,6 @@ MonoBehaviour:
   activeWeaponID: 0
   affectedByExplosion: 0
   debug: 0
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 64
-  maxSlopeAngle: 30
 --- !u!54 &7346563564494385454
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -148,12 +146,30 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!114 &5517461445132474578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5069884857767196175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 778e362c08077a64694ba197c7e71021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 43446430326675653}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
+  maxSlopeAngle: 45
+  rb: {fileID: 7346563564494385454}
 --- !u!1 &5541447919210231392
 GameObject:
   m_ObjectHideFlags: 0

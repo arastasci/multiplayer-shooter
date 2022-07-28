@@ -57,6 +57,17 @@ public class PlayerManager : MonoBehaviour
         
 
     }
+    public void Crouch(bool state)
+    {
+        if (state)
+        {
+            transform.localScale = new Vector3(1, 0.5f, 1);
+        }
+        else
+        {
+            transform.localScale = Vector3.one;
+        }
+    }
     public void Respawn()
     {
         model.enabled = true;

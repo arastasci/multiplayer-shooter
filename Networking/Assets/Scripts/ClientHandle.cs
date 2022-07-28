@@ -41,7 +41,12 @@ public class ClientHandle : MonoBehaviour
         Quaternion rotation = packet.ReadQuaternion();
         GameManager.players[id].transform.rotation = rotation;
     }
-
+    public static void PlayerCrouch(Packet packet)
+    {
+        int playerId = packet.ReadInt();
+        bool state = packet.ReadBool();
+        GameManager.players[playerId].Crouch(state);
+    }
     public static void PlayerDisconnected(Packet packet)
     {
         Debug.Log("disconnecting;");

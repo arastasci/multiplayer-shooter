@@ -7,4 +7,5 @@ public struct PlayerInput
     public float z;
     public float x;
     public bool isJumping;
+    public bool isCrouching;
 }

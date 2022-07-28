@@ -23,7 +23,7 @@ public enum ServerPackets
     playerChangeWeapon,
     playerReloaded,
     updateScoreboard,
-
+    playerCrouch
 }
 
 /// <summary>Sent from client to server.</summary>

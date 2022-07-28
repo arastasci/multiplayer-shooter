@@ -21,7 +21,9 @@ public class Player : MonoBehaviour
     public int maxHealth;
     public float projectileForceMultiplier = 10f;
     [SerializeField] float groundDragForce = 0.1f;
-    [SerializeField] float airDragForce = 0.05f;
+    [SerializeField] float airDragForce = 3f;
+    [SerializeField] float crouchDragForce = 1f;
+
     public float planarSpeed;
     private PlayerInput playerInput;
 
@@ -31,8 +33,13 @@ public class Player : MonoBehaviour
     bool hasItem = false;
     bool isMoving;
     bool isJumping;
+    bool isCrouching;
+    public bool isWallWalking;
     public Weapon[] weapons = new Weapon[2];
     [HideInInspector] public int activeWeaponID;
+
+    public Vector3 wallNormal;
+    Vector3 moveDirection;
 
     public bool affectedByExplosion = false;
     public void Initialize(int id, string username)
@@ -53,28 +60,69 @@ public class Player : MonoBehaviour
         Vector2 inputDir = new Vector2(playerInput.x, playerInput.z);
 
         Move(inputDir);
+        ServerSend.PlayerPosition(this);
+        ServerSend.PlayerRotation(this);
     }
 
-    void CounterMovement()
+    void CounterMovement(Vector3 velocity, float air, float ground)
     {
+        if (isGrounded)
+        {
+            moveDirection = -velocity.normalized * ground;
+            Debug.Log("ground force");
 
+        }
+        else
+        {
+            Debug.Log("air force");
+            moveDirection = -velocity.normalized * air;
+        }
+        if (moveDirection.magnitude > velocity.magnitude)
+        {
+            moveDirection = Vector3.zero;
+            rb.velocity = Vector3.zero;
+        }
     }
     float GetMagnitude(float x, float z)
     {
         return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(z, 2));
     }
     public bool debug;
+    void Crouch()
+    {
+        isCrouching = true;
+        transform.localScale = new Vector3(1,0.5f,1f);
+        CounterMovement(rb.velocity,crouchDragForce,airDragForce);
+    }
+    void StopCrouch()
+    {
+        isCrouching = false;
+        transform.localScale = new Vector3(1, 1, 1);
+
+    }
     private void Move(Vector2 inputDirection)
     {
+        if (playerInput.isCrouching)
+        {
+            Crouch();
+            ServerSend.PlayerCrouch(this, true);
+            return;
+        }
+        else if(!playerInput.isCrouching && isCrouching)
+        {
+            StopCrouch();
+            ServerSend.PlayerCrouch(this, false);
+        }
+
         rb.AddForce(Vector3.down * Time.deltaTime * 10);
-        Vector3 moveDirection = Vector3.zero;
+
+        moveDirection = Vector3.zero;
         isJumping = playerInput.isJumping;
         Vector3 velocity = rb.velocity;
         planarSpeed = GetMagnitude(velocity.x, velocity.z);
         if (inputDirection.magnitude == 0)
         {
             isMoving = false;
-            Debug.Log(planarSpeed);
         }
         else
         {
@@ -82,28 +130,12 @@ public class Player : MonoBehaviour
         }
         if (!isMoving && planarSpeed > 0f)
         {
-            if (isGrounded)
-            {
-                moveDirection = -rb.velocity.normalized * groundDragForce;
-                Debug.Log("ground force");
-
-            }
-            else
-            {
-                Debug.Log("air force");
-                moveDirection = -rb.velocity.normalized * airDragForce;
-            }
-            if(moveDirection.magnitude > velocity.magnitude)
-            {
-                moveDirection = Vector3.zero;
-                rb.velocity = Vector3.zero;
-            }
+            CounterMovement(velocity,airDragForce,groundDragForce);
         }
 
         debug = planarSpeed > maxSpeed;
         if (!debug)
         {
-            Debug.Log("planar speed is smaller than maxspeed");
             moveDirection = transform.right * inputDirection.x + transform.forward * inputDirection.y;
             moveDirection *= moveSpeed * moveMultiplier;
         }
@@ -113,14 +145,17 @@ public class Player : MonoBehaviour
         //}
         
 
-        if (isGrounded && isJumping)
+        if (isGrounded && isJumping && !isWallWalking)
         {
             moveDirection += transform.up * jumpspeed * jumpMultiplier;
             isGrounded = false;
         }
+        if (isWallWalking && isJumping)
+        {
+            moveDirection += (wallNormal +Vector3.up) * jumpMultiplier * jumpspeed;
+        }
         rb.AddForce(moveDirection, ForceMode.VelocityChange);
-        ServerSend.PlayerPosition(this);
-        ServerSend.PlayerRotation(this);
+        
 
     }
 
@@ -279,32 +314,8 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    public LayerMask whatIsGround;
-    public float maxSlopeAngle = 45f;
     
-    private bool IsFloor(Vector3 normal)
-    {
-        float angle = Vector3.Angle(normal, Vector3.up);
-        return angle < maxSlopeAngle;
-    }
-    private void OnCollisionStay(Collision collision)
-    {
-        if (((1 << collision.gameObject.layer) & whatIsGround) == 0 || isGrounded)
-        {
-            return;
-        }
-        for (int i = 0; i < collision.contactCount; i++)
-        {
+    
+    
 
-            Vector3 normal = collision.contacts[i].normal;
-            if (IsFloor(normal))
-            {
-                affectedByExplosion = false;
-                isGrounded = true;
-                break;
-            }
-
-
-        }
-    }
 }

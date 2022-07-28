@@ -23,6 +23,7 @@ public class ServerHandle
         playerInput.z = packet.ReadFloat();
         playerInput.x = packet.ReadFloat();
         playerInput.isJumping = packet.ReadBool();
+        playerInput.isCrouching = packet.ReadBool();
         Quaternion rotation = packet.ReadQuaternion();
         Server.clients[_fromClient].player.SetInput(playerInput, rotation);
     }

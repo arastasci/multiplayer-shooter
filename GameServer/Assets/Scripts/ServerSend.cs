@@ -77,7 +77,15 @@ public class ServerSend
         
 
     }
-
+    public static void PlayerCrouch(Player player, bool state)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.playerCrouch))
+        {
+            packet.Write(player.id);
+            packet.Write(state);
+            SendTCPDataToAll(packet);
+        }
+    }
     public static void PlayerPosition(Player player)
     {
         using (Packet packet = new Packet((int)ServerPackets.playerPosition))
