@@ -17,15 +17,14 @@ public class ServerHandle
         Server.clients[_fromClient].SendIntoGame(_username);
         // send player into game
     }
-    public static void PlayerMovement(int _fromClient, Packet packet)
+    public static void PlayerGetInput(int _fromClient, Packet packet)
     {
-        bool[] inputs = new bool[packet.ReadInt()];
-        for (int i = 0; i < inputs.Length; i++)
-        {
-            inputs[i] = packet.ReadBool();
-        }
+        PlayerInput playerInput = new PlayerInput();
+        playerInput.z = packet.ReadFloat();
+        playerInput.x = packet.ReadFloat();
+        playerInput.isJumping = packet.ReadBool();
         Quaternion rotation = packet.ReadQuaternion();
-        Server.clients[_fromClient].player.SetInput(inputs, rotation);
+        Server.clients[_fromClient].player.SetInput(playerInput, rotation);
     }
     public static void PlayerShoot(int _fromClient, Packet packet)
     {

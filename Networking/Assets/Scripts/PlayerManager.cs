@@ -68,7 +68,6 @@ public class PlayerManager : MonoBehaviour
             SetHealth(maxHealth, id); // id totally useless here, should refactor the code later
             UIManager.instance.HideKiller();
         }
-        
     }
 
     public void SetActiveWeapon(int id)

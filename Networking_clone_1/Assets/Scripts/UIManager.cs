@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI ammoInfo;
     [SerializeField] GameObject hud;
     [SerializeField] TextMeshProUGUI killerDisplay;
-
+    [SerializeField] TextMeshProUGUI speed;
     string[] killStrings = { "pwned you","chicago sunroof'ed you","married your mother" };
     private void Awake()
     {
@@ -54,7 +54,11 @@ public class UIManager : MonoBehaviour
         usernameField.interactable = false;
         Client.instance.ConnectToServer();
     }
-    
+    public void UpdateSpeed(float speed)
+    {
+        this.speed.text = String.Format("{0:0.##}", speed);
+        Debug.Log(speed);
+    }
     public void ShowScoreBoard()
     {
         scoreBoard.SetActive(true);

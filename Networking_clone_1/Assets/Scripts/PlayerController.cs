@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public struct PlayerInput
+{
+    public float z;
+    public float x;
+    public bool isJumping;
+}
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
@@ -60,14 +67,10 @@ public class PlayerController : MonoBehaviour
     }
     private void SendInputToServer()
     {
-        bool[] inputs = new bool[]
-        {
-            Input.GetKey(KeyCode.W),
-            Input.GetKey(KeyCode.S),
-            Input.GetKey(KeyCode.A),
-            Input.GetKey(KeyCode.D),
-            Input.GetKey(KeyCode.Space),
-        };
-        ClientSend.PlayerMovement(inputs);
+        PlayerInput input = new PlayerInput();
+        input.z = Input.GetAxisRaw("Vertical");
+        input.x = Input.GetAxisRaw("Horizontal");
+        input.isJumping = Input.GetKey(KeyCode.Space);
+        ClientSend.PlayerGetInput(input);
     }
 }

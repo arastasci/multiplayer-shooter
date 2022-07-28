@@ -18,20 +18,19 @@ public class Player : MonoBehaviour
     float speedMultiplier = 1f;
     public int health;
     public int maxHealth;
-
     public float projectileForceMultiplier = 10f;
-
-
-    private bool[] inputs;
+    [SerializeField] float groundDragForce = 0.1f;
+    [SerializeField] float airDragForce = 0.05f;
+    public float planarSpeed;
+    private PlayerInput playerInput;
 
     private int killCount = 0;
     private int deathCount = 0;
-    public float maxVelocity = 4f;
+    public float maxSpeed = 4f;
     bool hasItem = false;
-
-
+    bool isMoving;
+    bool isJumping;
     public Weapon[] weapons = new Weapon[2];
-
     [HideInInspector] public int activeWeaponID;
 
     public void Initialize(int id, string username)
@@ -39,51 +38,66 @@ public class Player : MonoBehaviour
         this.id = id;
         this.username = username;
         health = maxHealth;
-        inputs = new bool[5];
+        playerInput = new PlayerInput();
         activeWeaponID = weapons[0].id;
      
-
+        
     }
 
     public void FixedUpdate()
     {
         if (health <= 0f) return;
 
-        Vector2 inputDir = Vector2.zero;
-        if (inputs[0])
-        {
-            inputDir.y += 1;
-        }
-        if (inputs[1])
-        {
-            inputDir.y -= 1;
-        }
-        if (inputs[2])
-        {
-            inputDir.x -= 1;
-        }
-        if (inputs[3])
-        {
-            inputDir.x += 1;
-        }
+        Vector2 inputDir = new Vector2(playerInput.x, playerInput.z);
 
         Move(inputDir);
     }
 
+    void CounterMovement()
+    {
 
+    }
+    float GetMagnitude(float x, float z)
+    {
+        return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(z, 2));
+    }
+    public bool debug;
     private void Move(Vector2 inputDirection)
     {
+        rb.AddForce(Vector3.down * Time.deltaTime * 10);
         Vector3 moveDirection = Vector3.zero;
-
+        isJumping = playerInput.isJumping;
         Vector3 velocity = rb.velocity;
-        float planarVelocity = Mathf.Sqrt(Mathf.Pow(velocity.x, 2) + Mathf.Pow(velocity.z, 2));
-        if (planarVelocity < maxVelocity)
+        planarSpeed = GetMagnitude(velocity.x, velocity.z);
+        if (inputDirection.magnitude == 0)
+        {
+            isMoving = false;
+        }
+        else
+        {
+            isMoving = true;
+        }
+        if (!isMoving && planarSpeed > 0.5f)
+        {
+            if (isGrounded)
+            {
+                moveDirection = -rb.velocity.normalized * groundDragForce;
+            }
+            else
+            {
+                moveDirection = -rb.velocity.normalized * airDragForce;
+            }
+        }
+
+        debug = planarSpeed > maxSpeed;
+        if (!debug)
         {
             moveDirection = transform.right * inputDirection.x + transform.forward * inputDirection.y;
             moveDirection *= moveSpeed * speedMultiplier;
         }
+        
 
-        if (isGrounded && inputs[4])
+        if (isGrounded && isJumping)
         {
             moveDirection += transform.up * jumpspeed * speedMultiplier;
             isGrounded = false;
@@ -94,11 +108,12 @@ public class Player : MonoBehaviour
 
     }
 
-    public void SetInput(bool[] inputs, Quaternion rotation)
+    public void SetInput(PlayerInput input, Quaternion rotation)
     {
-        this.inputs = inputs;
+        playerInput = input;
         transform.rotation = rotation;
     }
+    #region shoot
     public void Shoot(Vector3 direction)
     {
 
@@ -120,7 +135,7 @@ public class Player : MonoBehaviour
 
         ServerSend.ProjectileLaunched(this, projectileInfo.ID, projectileInfo.projectileShotFrom);
     }
-
+    
     public void Fire(Vector3 direction)
     {
         if (!weapons[activeWeaponID].canShoot) return;
@@ -150,6 +165,9 @@ public class Player : MonoBehaviour
         ServerSend.PlayerChangeWeapon(-1,id, weaponID);
         ServerSend.PlayerWeaponInfo(id, weapons[weaponID]);
     }
+    #endregion
+
+    #region get set killdeath
 
     public void IncrementKill()
     {
@@ -166,7 +184,9 @@ public class Player : MonoBehaviour
     {
         return deathCount;
     }
+    #endregion
 
+    #region handle health and speed
     public void TakeDamage(int damage,int byPlayer)
     {
         if(health <= 0)
@@ -219,7 +239,8 @@ public class Player : MonoBehaviour
         ServerSend.PlayerRespawned(this);
     }
     
-    
+
+
     public bool AttemptPickupItem(int itemType)
     {
         if (hasItem) return false;
@@ -238,6 +259,33 @@ public class Player : MonoBehaviour
         }
         return true;
     }
-    
-    
+    #endregion
+
+    public LayerMask whatIsGround;
+    public float maxSlopeAngle = 45f;
+
+    private bool IsFloor(Vector3 normal)
+    {
+        float angle = Vector3.Angle(normal, Vector3.up);
+        return angle < maxSlopeAngle;
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        if (((1 << collision.gameObject.layer) & whatIsGround) == 0 || isGrounded)
+        {
+            return;
+        }
+        for (int i = 0; i < collision.contactCount; i++)
+        {
+
+            Vector3 normal = collision.contacts[i].normal;
+            if (IsFloor(normal))
+            {
+                isGrounded = true;
+                break;
+            }
+
+
+        }
+    }
 }

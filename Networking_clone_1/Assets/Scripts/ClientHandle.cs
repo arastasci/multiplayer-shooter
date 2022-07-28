@@ -31,7 +31,9 @@ public class ClientHandle : MonoBehaviour
     {
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
+        float speed = packet.ReadFloat();
         GameManager.players[id].transform.position = position;
+        UIManager.instance.UpdateSpeed(speed);
     }
     public static void PlayerRotation(Packet packet)
     {

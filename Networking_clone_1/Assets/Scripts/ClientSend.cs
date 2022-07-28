@@ -27,15 +27,13 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    public static void PlayerMovement(bool[] inputs)
+    public static void PlayerGetInput(PlayerInput playerInput)
     {
-        using(Packet _packet = new Packet((int)ClientPackets.playerMovement))
+        using(Packet _packet = new Packet((int)ClientPackets.playerInput))
         {
-            _packet.Write(inputs.Length);
-            foreach(bool input in inputs)
-            {
-                _packet.Write(input);
-            }
+            _packet.Write(playerInput.z);
+            _packet.Write(playerInput.x);
+            _packet.Write(playerInput.isJumping);
             _packet.Write(GameManager.players[Client.instance.myId].transform.rotation);
             SendUDPData(_packet);
         }

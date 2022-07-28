@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3709818743816255631}
   - component: {fileID: 7776138940853614045}
   - component: {fileID: 43446430326675653}
-  - component: {fileID: 3067166738843462357}
   - component: {fileID: 7346563564494385454}
   m_Layer: 0
   m_Name: Player
@@ -125,29 +124,19 @@ MonoBehaviour:
   health: 100
   maxHealth: 100
   projectileForceMultiplier: 10
-  itemAmount: 0
-  maxItemAmount: 0
-  maxVelocity: 4
+  groundDragForce: 0
+  airDragForce: 0
+  planarSpeed: 0
+  maxSpeed: 7
   weapons:
   - {fileID: 3150059016676306759}
   - {fileID: 1344876290118467454}
---- !u!114 &3067166738843462357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5069884857767196175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 778e362c08077a64694ba197c7e71021, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  activeWeaponID: 0
+  debug: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
-  maxSlopeAngle: 45
-  player: {fileID: 43446430326675653}
+  maxSlopeAngle: 30
 --- !u!54 &7346563564494385454
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -163,7 +152,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1 &5541447919210231392
 GameObject:
   m_ObjectHideFlags: 0
