@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     ContactPoint[] contacts;
     [SerializeField] Rigidbody rb;
     [SerializeField] float trivialDifference = 3f;
-    private bool IsWallJumpable(Vector3 normal)
+    public static bool IsWallJumpable(Vector3 normal)
     {
         float angle = Vector3.Angle(normal, Vector3.up);
         
@@ -33,12 +33,16 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator SlideOff()
     {
         yield return new WaitForSeconds(1f);
-        rb.useGravity = true;
+        player.slidingOff = true;
     }
+    
+
     private void OnCollisionStay(Collision col)
     {
         if (player.isGrounded)
         {
+            player.isWallWalking = false;
+            rb.useGravity = true;
             return;
         }
         contacts = new ContactPoint[col.contactCount];
@@ -48,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         {
             ContactPoint cp = contacts[i];
 
-            if (IsWallJumpable(cp.normal) && lastNormalWJ != cp.normal)
+            if (IsWallJumpable(cp.normal) && lastNormalWJ != cp.normal )
             {
                 lastNormalWJ = cp.normal;
                 rb.useGravity = false;
@@ -72,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 player.affectedByExplosion = false;
                 player.isGrounded = true;
+                player.slidingOff = false;
                 break;
             }
         }

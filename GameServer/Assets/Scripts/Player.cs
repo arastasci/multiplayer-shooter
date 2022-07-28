@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
     [SerializeField] float groundDragForce = 0.1f;
     [SerializeField] float airDragForce = 3f;
     [SerializeField] float crouchDragForce = 1f;
-
+    [SerializeField] float wallDashForce = 1f;
     public float planarSpeed;
     private PlayerInput playerInput;
 
@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
     bool isJumping;
     bool isCrouching;
     public bool isWallWalking;
+    public bool slidingOff = false;
     public Weapon[] weapons = new Weapon[2];
     [HideInInspector] public int activeWeaponID;
 
@@ -102,6 +103,10 @@ public class Player : MonoBehaviour
     }
     private void Move(Vector2 inputDirection)
     {
+        if (slidingOff)
+        {
+            rb.AddForce(Vector3.down * Time.deltaTime * 10);
+        }
         if (playerInput.isCrouching)
         {
             Crouch();
@@ -147,16 +152,24 @@ public class Player : MonoBehaviour
 
         if (isGrounded && isJumping && !isWallWalking)
         {
-            moveDirection += transform.up * jumpspeed * jumpMultiplier;
+            if (Physics.Raycast(shootOrigin.position, transform.forward,out RaycastHit hit,8f))
+            {
+                if (PlayerMovement.IsWallJumpable(hit.normal))
+                {
+                    Debug.Log("wall jumpable");
+                    moveDirection += wallDashForce * transform.forward + jumpspeed * transform.up;
+                }
+            }
+            moveDirection += jumpMultiplier * jumpspeed * transform.up;
             isGrounded = false;
         }
         if (isWallWalking && isJumping)
         {
-            moveDirection += (wallNormal +Vector3.up) * jumpMultiplier * jumpspeed;
+            moveDirection += (wallNormal + Vector3.Cross(Vector3.up,wallNormal) +Vector3.up).normalized * jumpMultiplier * jumpspeed;
         }
         rb.AddForce(moveDirection, ForceMode.VelocityChange);
         
-
+        
     }
 
     public void SetInput(PlayerInput input, Quaternion rotation)
@@ -189,7 +202,11 @@ public class Player : MonoBehaviour
     
     public void Fire(Vector3 direction)
     {
-        if (!weapons[activeWeaponID].canShoot) return;
+        if (!weapons[activeWeaponID].canShoot)
+        {
+            if (weapons[activeWeaponID].canReload && weapons[activeWeaponID].bulletLeftInMag == 0) Reload();
+            return;
+        }
         weapons[activeWeaponID].DecrementBullet(id);
         switch (activeWeaponID)
         {
