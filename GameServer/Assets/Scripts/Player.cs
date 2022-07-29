@@ -132,6 +132,7 @@ public class Player : MonoBehaviour
         else
         {
             isMoving = true;
+            AudioManager.instance.PlayAudio(FXID.walk, FXEntity.player, id);
         }
         if (!isMoving && planarSpeed > 0f)
         {
@@ -157,15 +158,20 @@ public class Player : MonoBehaviour
                 if (PlayerMovement.IsWallJumpable(hit.normal))
                 {
                     Debug.Log("wall jumpable");
-                    moveDirection += wallDashForce * transform.forward + jumpspeed * transform.up;
+                    moveDirection += wallDashForce * transform.forward + jumpspeed * 1.5f * transform.up;
                 }
             }
-            moveDirection += jumpMultiplier * jumpspeed * transform.up;
+            else
+            {
+                moveDirection += jumpMultiplier * jumpspeed * transform.up;
+            }
             isGrounded = false;
+            AudioManager.instance.PlayAudio(FXID.jump, FXEntity.player, id);
         }
         if (isWallWalking && isJumping)
         {
             moveDirection += (wallNormal + Vector3.Cross(Vector3.up,wallNormal) +Vector3.up).normalized * jumpMultiplier * jumpspeed;
+            AudioManager.instance.PlayAudio(FXID.wallJump, FXEntity.player, id);
         }
         rb.AddForce(moveDirection, ForceMode.VelocityChange);
         
@@ -207,6 +213,7 @@ public class Player : MonoBehaviour
             if (weapons[activeWeaponID].canReload && weapons[activeWeaponID].bulletLeftInMag == 0) Reload();
             return;
         }
+        AudioManager.instance.PlayAudio(FXID.fire, FXEntity.player, id);
         weapons[activeWeaponID].DecrementBullet(id);
         switch (activeWeaponID)
         {
@@ -215,7 +222,6 @@ public class Player : MonoBehaviour
                 break;
             case 1:
                 LaunchProjectile(direction);
-                Debug.Log("player fired");
                 break;
         }
         ServerSend.PlayerWeaponInfo(id, weapons[activeWeaponID]);

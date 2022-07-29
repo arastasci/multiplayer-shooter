@@ -276,7 +276,8 @@ public class Client : MonoBehaviour
             {(int)ServerPackets.createItemSpawner, ClientHandle.CreateItemSpawner },
             {(int)ServerPackets.itemPickedUp, ClientHandle.ItemPickedUp },
             {(int)ServerPackets.itemSpawned, ClientHandle.ItemSpawned },
-            {(int)ServerPackets.playerCrouch,ClientHandle.PlayerCrouch }
+            {(int)ServerPackets.playerCrouch,ClientHandle.PlayerCrouch },
+            {(int)ServerPackets.playAudio, ClientHandle.PlayAudio }
         };
         Debug.Log("Initialized packets.");
     }

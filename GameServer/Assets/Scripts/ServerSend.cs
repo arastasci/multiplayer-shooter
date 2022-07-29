@@ -262,4 +262,17 @@ public class ServerSend
             SendTCPDataToAll(packet);
         }
     }
+
+    public static void PlayAudio(int fxID,int fxEnt, int entityID )
+    {
+        using (Packet packet = new Packet((int)ServerPackets.playAudio))
+        {
+            packet.Write(fxID);
+            packet.Write(fxEnt);
+            packet.Write(entityID);
+            SendTCPDataToAll(packet);
+        }
+    }
 }
+
+

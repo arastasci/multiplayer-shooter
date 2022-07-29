@@ -14,8 +14,10 @@ public class PlayerManager : MonoBehaviour
     CameraController cameraController;
     CamFollowKiller camFollowKiller;
     public ScoreData score;
-
     int activeWeapon = 1;
+    [SerializeField] AudioSource audioSource;
+
+    public AudioClip[] sounds;
     public void Initialize(int id, string userName)
     {
         this.id = id;
@@ -29,6 +31,17 @@ public class PlayerManager : MonoBehaviour
             cameraController = transform.Find("Camera").GetComponent<CameraController>();
         }
         score = new ScoreData(id, 0, 0);
+        
+    }
+
+    public void PlayAudio(int fxID)
+    {
+        if(audioSource.clip != AudioManager.instance.audioClips[fxID])
+        {
+            audioSource.clip = AudioManager.instance.audioClips[fxID];
+        }
+        if(!audioSource.isPlaying)
+        audioSource.Play();
     }
     public void SetHealth(int health, int byPlayer)
     {

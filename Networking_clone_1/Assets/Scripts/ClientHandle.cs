@@ -149,4 +149,18 @@ public class ClientHandle : MonoBehaviour
         int byPlayer = packet.ReadInt();
         GameManager.itemSpawners[spawnerID].ItemPickedUp();
     }
+
+    public static void PlayAudio(Packet packet)
+    {
+        int fxID = packet.ReadInt();
+        int fxEnt = packet.ReadInt();
+        int entityID = packet.ReadInt();
+        switch((FXEntity)fxEnt)
+        {
+            case FXEntity.player:
+                GameManager.players[entityID].PlayAudio(fxID);
+                break;
+        }
+
+    }
 }

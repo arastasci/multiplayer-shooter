@@ -60,7 +60,6 @@ public class PlayerMovement : MonoBehaviour
                 player.isWallWalking = true;
                 player.wallNormal = cp.normal;
                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-
                 StartCoroutine(SlideOff());
                 break;
             }

@@ -1,7 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum FXEntity
+{
+    player = 0,
+    projectile
 
+}
+public enum FXID
+{
+    walk = 0,
+    jump,
+    wallJump,
+    speedy,
+    health,
+    grounded,
+    die,
+    fire,
+    explode,
+}
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
