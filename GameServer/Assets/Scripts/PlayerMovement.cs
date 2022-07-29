@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     ContactPoint[] contacts;
     [SerializeField] Rigidbody rb;
     [SerializeField] float trivialDifference = 3f;
+
+    bool isAffectedBool;
     public static bool IsWallJumpable(Vector3 normal)
     {
         float angle = Vector3.Angle(normal, Vector3.up);
@@ -71,9 +73,19 @@ public class PlayerMovement : MonoBehaviour
         for (int i = 0; i < points; i++)
         {
             Vector3 normal = contacts[i].normal;
-            if (IsFloor(normal))
+            if(player.lastExplodedPosition != null)
             {
+                isAffectedBool =  1 > Vector3.Distance(player.lastExplodedPosition, contacts[i].point);
+            }
+            else
+            {
+                isAffectedBool = false;
+            }
+            if (IsFloor(normal) && !isAffectedBool)
+            {
+                Debug.Log(player.affectedByExplosion);
                 player.affectedByExplosion = false;
+
                 player.isGrounded = true;
                 player.slidingOff = false;
                 break;

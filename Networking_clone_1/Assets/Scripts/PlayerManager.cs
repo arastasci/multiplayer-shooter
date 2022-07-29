@@ -12,12 +12,13 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] GameObject[] weapons = new GameObject[2];
     PlayerController playerController;
     CameraController cameraController;
-    CamFollowKiller camFollowKiller;
     public ScoreData score;
     int activeWeapon = 1;
     [SerializeField] AudioSource audioSource;
-
+    public bool isGrounded;
+    public bool isAffectedByExplosion;
     public AudioClip[] sounds;
+    int currentClip = -1;
     public void Initialize(int id, string userName)
     {
         this.id = id;
@@ -36,12 +37,25 @@ public class PlayerManager : MonoBehaviour
 
     public void PlayAudio(int fxID)
     {
-        if(audioSource.clip != AudioManager.instance.audioClips[fxID])
+        if(currentClip == -1)
         {
-            audioSource.clip = AudioManager.instance.audioClips[fxID];
+            currentClip = fxID;
+        } 
+        
+        if (!audioSource.isPlaying || (fxID != (int)FXID.walk))
+        {
+            currentClip = fxID;
+            audioSource.clip = AudioManager.instance.audioClips[currentClip];
+
+            if (currentClip == (int)FXID.walk)
+            {
+                if (!isGrounded || isAffectedByExplosion) return;
+                audioSource.volume = Random.Range(0.7f, 1f);
+                audioSource.pitch = Random.Range(0.7f, 1f);
+            }
+            audioSource.Play();
+
         }
-        if(!audioSource.isPlaying)
-        audioSource.Play();
     }
     public void SetHealth(int health, int byPlayer)
     {

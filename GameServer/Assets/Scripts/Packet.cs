@@ -28,7 +28,7 @@ public enum ServerPackets
     updateScoreboard,
     playerCrouch,
     playAudio
-
+    
 }
 
 /// <summary>Sent from client to server.</summary>

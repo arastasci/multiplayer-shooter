@@ -37,10 +37,13 @@ public class Projectile : MonoBehaviour
                 Vector3 vector = rigidbodyCollider.transform.position - transform.position;
                 float distance = vector.magnitude;
                 int damageTaken = (int)(damageMultiplier * (1 - (distance / explosionRadius)));
-                player.affectedByExplosion = true;
+                
                 if (damageTaken > ForceThreshold)
                 {
                     rigidbodyCollider.AddForce(Vector3.Normalize(vector) * damageTaken * forceMultiplier, ForceMode.Acceleration);
+                    player.affectedByExplosion = true;
+                    player.isGrounded = false;
+                    player.lastExplodedPosition = transform.position;
                 }
                 if(playerID != player.id)  player.TakeDamage(damageTaken, playerID);
 

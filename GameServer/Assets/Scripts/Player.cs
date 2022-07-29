@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     public bool slidingOff = false;
     public Weapon[] weapons = new Weapon[2];
     [HideInInspector] public int activeWeaponID;
-
+    public Vector3 lastExplodedPosition;
     public Vector3 wallNormal;
     Vector3 moveDirection;
 
@@ -71,7 +71,6 @@ public class Player : MonoBehaviour
         {
             moveDirection = -velocity.normalized * ground;
             Debug.Log("ground force");
-
         }
         else
         {
@@ -103,6 +102,7 @@ public class Player : MonoBehaviour
     }
     private void Move(Vector2 inputDirection)
     {
+        
         if (slidingOff)
         {
             rb.AddForce(Vector3.down * Time.deltaTime * 10);

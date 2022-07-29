@@ -1,24 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum FXEntity
-{
-    player = 0,
-    projectile
 
-}
-public enum FXID
-{
-    walk = 0,
-    jump,
-    wallJump,
-    speedy,
-    health,
-    grounded,
-    die,
-    fire,
-    explode,
-}
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
@@ -71,9 +54,10 @@ public class GameManager : MonoBehaviour
     }
     public static void ProjectileExplode(int id)
     {
-        Debug.Log("exploded");
         GameObject projectile = projectiles[id].gameObject;
         projectiles.Remove(id);
+        
+        
         Destroy(projectile);
         // play animation
 
@@ -88,6 +72,5 @@ public class GameManager : MonoBehaviour
         GameObject spawner = Instantiate(itemSpawnerPrefab, position, itemSpawnerPrefab.transform.rotation);
         spawner.GetComponent<ItemSpawner>().Initialize(spawnerID,itemType,hasItem);
         itemSpawners.Add(spawnerID, spawner.GetComponent<ItemSpawner>());
-
     }
 }

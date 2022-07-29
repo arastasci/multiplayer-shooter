@@ -32,7 +32,11 @@ public class ClientHandle : MonoBehaviour
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
         float speed = packet.ReadFloat();
+        bool isGrounded = packet.ReadBool();
+        bool isAffectedByExplosion = packet.ReadBool();
         GameManager.players[id].transform.position = position;
+        GameManager.players[id].isGrounded = isGrounded;
+        GameManager.players[id].isAffectedByExplosion = isAffectedByExplosion;
         UIManager.instance.UpdateSpeed(speed);
     }
     public static void PlayerRotation(Packet packet)
@@ -160,6 +164,10 @@ public class ClientHandle : MonoBehaviour
             case FXEntity.player:
                 GameManager.players[entityID].PlayAudio(fxID);
                 break;
+            case FXEntity.projectile:
+                GameManager.projectiles[entityID].PlayAudio(fxID);
+                break;
+
         }
 
     }

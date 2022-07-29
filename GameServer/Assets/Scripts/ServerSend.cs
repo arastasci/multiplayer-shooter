@@ -93,7 +93,8 @@ public class ServerSend
             packet.Write(player.id);
             packet.Write(player.transform.position);
             packet.Write(player.planarSpeed);
-
+            packet.Write(player.isGrounded);
+            packet.Write(player.affectedByExplosion);
             SendUDPDataToAll(packet);
         }
     }

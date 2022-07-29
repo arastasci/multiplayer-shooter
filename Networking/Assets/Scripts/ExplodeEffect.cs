@@ -5,11 +5,13 @@ using UnityEngine;
 public class ExplodeEffect : MonoBehaviour
 {
     ParticleSystem particle;
-    // Start is called before the first frame update
+    [SerializeField] AudioSource audioSource;
+
     void Start()
     {
         particle = GetComponent<ParticleSystem>();
         particle.Play();
+        audioSource.Play();
     }
     private void FixedUpdate()
     {
