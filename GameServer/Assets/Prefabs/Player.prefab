@@ -128,12 +128,18 @@ MonoBehaviour:
   groundDragForce: 5
   airDragForce: 3
   crouchDragForce: 1
+  wallDashForce: 1
   planarSpeed: 0
   maxSpeed: 7
+  isWallWalking: 0
+  slidingOff: 0
   weapons:
   - {fileID: 3150059016676306759}
   - {fileID: 1344876290118467454}
   activeWeaponID: 0
+  lastExplodedPosition: {x: 0, y: 0, z: 0}
+  wallNormal: {x: 0, y: 0, z: 0}
+  playerMovement: {fileID: 5517461445132474578}
   affectedByExplosion: 0
   debug: 0
 --- !u!54 &7346563564494385454
@@ -170,6 +176,7 @@ MonoBehaviour:
     m_Bits: 64
   maxSlopeAngle: 45
   rb: {fileID: 7346563564494385454}
+  trivialDifference: 3
 --- !u!1 &5541447919210231392
 GameObject:
   m_ObjectHideFlags: 0

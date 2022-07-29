@@ -50,24 +50,26 @@ public class PlayerMovement : MonoBehaviour
         contacts = new ContactPoint[col.contactCount];
         int points = col.GetContacts(contacts);
 
-        for (int i = 0; i < points; i++)
-        {
-            ContactPoint cp = contacts[i];
-
-            if (IsWallJumpable(cp.normal) && lastNormalWJ != cp.normal )
-            {
-                lastNormalWJ = cp.normal;
-                rb.useGravity = false;
-                lastCollider = col.collider;
-                player.isWallWalking = true;
-                player.wallNormal = cp.normal;
-                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-                StartCoroutine(SlideOff());
-                break;
-            }
-        }
+        
         if (((1 << col.gameObject.layer) & whatIsGround) == 0)
         {
+            for (int i = 0; i < points; i++)
+            {
+                ContactPoint cp = contacts[i];
+
+                if (IsWallJumpable(cp.normal) && lastNormalWJ != cp.normal)
+                {
+                    Debug.Log("this wall is wall-jumpable");
+                    lastNormalWJ = cp.normal;
+                    rb.useGravity = false;
+                    lastCollider = col.collider;
+                    player.isWallWalking = true;
+                    player.wallNormal = cp.normal;
+                    rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                    StartCoroutine(SlideOff());
+                    break;
+                }
+            }
             return;
         }
         for (int i = 0; i < points; i++)

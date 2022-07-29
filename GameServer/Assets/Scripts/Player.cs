@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     public Vector3 lastExplodedPosition;
     public Vector3 wallNormal;
     Vector3 moveDirection;
-
+    public PlayerMovement playerMovement;
     public bool affectedByExplosion = false;
     public void Initialize(int id, string username)
     {
@@ -153,15 +153,19 @@ public class Player : MonoBehaviour
 
         if (isGrounded && isJumping && !isWallWalking)
         {
+            bool flag = false;
             if (Physics.Raycast(shootOrigin.position, transform.forward,out RaycastHit hit,8f))
             {
+                
+
                 if (PlayerMovement.IsWallJumpable(hit.normal))
                 {
+                    flag = true;
                     Debug.Log("wall jumpable");
                     moveDirection += wallDashForce * transform.forward + jumpspeed * 1.5f * transform.up;
                 }
             }
-            else
+            if(!flag)
             {
                 moveDirection += jumpMultiplier * jumpspeed * transform.up;
             }
