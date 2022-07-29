@@ -42,7 +42,7 @@ public class Projectile : MonoBehaviour
                 {
                     rigidbodyCollider.AddForce(Vector3.Normalize(vector) * damageTaken * forceMultiplier, ForceMode.Acceleration);
                     player.affectedByExplosion = true;
-                    player.isGrounded = false;
+                    player.playerMovement.isGrounded = false;
                     player.lastExplodedPosition = transform.position;
                 }
                 if(playerID != player.id)  player.TakeDamage(damageTaken, playerID);

@@ -11,36 +11,29 @@ public class Player : MonoBehaviour
     public Transform shootOrigin;
 
 
-    public bool isGrounded = true;
-    public float gravity = -9.81f;
-    public float moveSpeed = 5f;
-    public float jumpspeed = 5f;
-    float moveMultiplier = 1f;
-    float jumpMultiplier = 1f;
+    
+    
+    public float moveMultiplier = 1f;
+    public float jumpMultiplier = 1f;
     public int health;
     public int maxHealth;
     public float projectileForceMultiplier = 10f;
-    [SerializeField] float groundDragForce = 0.1f;
-    [SerializeField] float airDragForce = 3f;
-    [SerializeField] float crouchDragForce = 1f;
-    [SerializeField] float wallDashForce = 1f;
+    
     public float planarSpeed;
     private PlayerInput playerInput;
 
     private int killCount = 0;
     private int deathCount = 0;
-    public float maxSpeed = 4f;
+    
+    public float maxSpeedMultiplier;
+
     bool hasItem = false;
-    bool isMoving;
-    bool isJumping;
-    bool isCrouching;
-    public bool isWallWalking;
-    public bool slidingOff = false;
+    
+    
     public Weapon[] weapons = new Weapon[2];
     [HideInInspector] public int activeWeaponID;
     public Vector3 lastExplodedPosition;
     public Vector3 wallNormal;
-    Vector3 moveDirection;
     public PlayerMovement playerMovement;
     public bool affectedByExplosion = false;
     public void Initialize(int id, string username)
@@ -58,126 +51,98 @@ public class Player : MonoBehaviour
     {
         if (health <= 0f) return;
 
-        Vector2 inputDir = new Vector2(playerInput.x, playerInput.z);
+        
 
-        Move(inputDir);
+        playerMovement.Move(playerInput);
         ServerSend.PlayerPosition(this);
         ServerSend.PlayerRotation(this);
     }
 
-    void CounterMovement(Vector3 velocity, float air, float ground)
-    {
-        if (isGrounded)
-        {
-            moveDirection = -velocity.normalized * ground;
-            Debug.Log("ground force");
-        }
-        else
-        {
-            Debug.Log("air force");
-            moveDirection = -velocity.normalized * air;
-        }
-        if (moveDirection.magnitude > velocity.magnitude)
-        {
-            moveDirection = Vector3.zero;
-            rb.velocity = Vector3.zero;
-        }
-    }
-    float GetMagnitude(float x, float z)
-    {
-        return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(z, 2));
-    }
-    public bool debug;
-    void Crouch()
-    {
-        isCrouching = true;
-        transform.localScale = new Vector3(1,0.5f,1f);
-        CounterMovement(rb.velocity,crouchDragForce,airDragForce);
-    }
-    void StopCrouch()
-    {
-        isCrouching = false;
-        transform.localScale = new Vector3(1, 1, 1);
-
-    }
+    
     private void Move(Vector2 inputDirection)
     {
-        
-        if (slidingOff)
-        {
-            rb.AddForce(Vector3.down * Time.deltaTime * 10);
-        }
-        if (playerInput.isCrouching)
-        {
-            Crouch();
-            ServerSend.PlayerCrouch(this, true);
-            return;
-        }
-        else if(!playerInput.isCrouching && isCrouching)
-        {
-            StopCrouch();
-            ServerSend.PlayerCrouch(this, false);
-        }
+        rb.AddForce(Vector3.down * Time.fixedDeltaTime * 15);
 
-        rb.AddForce(Vector3.down * Time.deltaTime * 10);
 
-        moveDirection = Vector3.zero;
-        isJumping = playerInput.isJumping;
-        Vector3 velocity = rb.velocity;
-        planarSpeed = GetMagnitude(velocity.x, velocity.z);
-        if (inputDirection.magnitude == 0)
-        {
-            isMoving = false;
-        }
-        else
-        {
-            isMoving = true;
-            AudioManager.instance.PlayAudio(FXID.walk, FXEntity.player, id);
-        }
-        if (!isMoving && planarSpeed > 0f)
-        {
-            CounterMovement(velocity,airDragForce,groundDragForce);
-        }
 
-        debug = planarSpeed > maxSpeed;
-        if (!debug)
-        {
-            moveDirection = transform.right * inputDirection.x + transform.forward * inputDirection.y;
-            moveDirection *= moveSpeed * moveMultiplier;
-        }
-        //else if(!affectedByExplosion)
+
+
+        //if (slidingOff)
         //{
-        //    rb.velocity = new Vector3(velocity.normalized.x * maxSpeed, velocity.y, velocity.normalized.z * maxSpeed);
+        //    rb.AddForce(Vector3.down * Time.deltaTime * 15);
+        //}
+        //if (playerInput.isCrouching)
+        //{
+        //    Crouch();
+        //    ServerSend.PlayerCrouch(this, true);
+        //    return;
+        //}
+        //else if(!playerInput.isCrouching && isCrouching)
+        //{
+        //    StopCrouch();
+        //    ServerSend.PlayerCrouch(this, false);
+        //}
+
+        //rb.AddForce(Vector3.down * Time.deltaTime * 10);
+
+        //moveDirection = Vector3.zero;
+        //isJumping = playerInput.isJumping;
+        //Vector3 velocity = rb.velocity;
+        //planarSpeed = GetMagnitude(velocity.x, velocity.z);
+        //if (inputDirection.magnitude == 0)
+        //{
+        //    isMoving = false;
+        //}
+        //else
+        //{
+        //    isMoving = true;
+        //    AudioManager.instance.PlayAudio(FXID.walk, FXEntity.player, id);
+        //}
+        //if (!isMoving && planarSpeed > 0f)
+        //{
+        //    CounterMovement(velocity,airDragForce,groundDragForce);
         //}
         
 
-        if (isGrounded && isJumping && !isWallWalking)
-        {
-            bool flag = false;
-            if (Physics.Raycast(shootOrigin.position, transform.forward,out RaycastHit hit,8f))
-            {
+        //debug = planarSpeed > maxSpeed;
+        //if (!debug)
+        //{
+        //    moveDirection = transform.right * inputDirection.x + transform.forward * inputDirection.y;
+        //    moveDirection *= moveSpeed * moveMultiplier;
+        //}
+        ////else if(!affectedByExplosion)
+        ////{
+        ////    rb.velocity = new Vector3(velocity.normalized.x * maxSpeed, velocity.y, velocity.normalized.z * maxSpeed);
+        ////}
+        
+
+        //if (isGrounded && isJumping && !isWallWalking)
+        //{
+        //    bool flag = false;
+        //    if (Physics.Raycast(shootOrigin.position, transform.forward,out RaycastHit hit,8f))
+        //    {
                 
 
-                if (PlayerMovement.IsWallJumpable(hit.normal))
-                {
-                    flag = true;
-                    Debug.Log("wall jumpable");
-                    moveDirection += wallDashForce * transform.forward + jumpspeed * 1.5f * transform.up;
-                }
-            }
-            if(!flag)
-            {
-                moveDirection += jumpMultiplier * jumpspeed * transform.up;
-            }
-            isGrounded = false;
-            AudioManager.instance.PlayAudio(FXID.jump, FXEntity.player, id);
-        }
-        if (isWallWalking && isJumping)
-        {
-            moveDirection += (wallNormal + Vector3.Cross(Vector3.up,wallNormal) +Vector3.up).normalized * jumpMultiplier * jumpspeed;
-            AudioManager.instance.PlayAudio(FXID.wallJump, FXEntity.player, id);
-        }
-        rb.AddForce(moveDirection, ForceMode.VelocityChange);
+        //        if (PlayerMovement.IsWallJumpable(hit.normal))
+        //        {
+        //            flag = true;
+        //            Debug.Log("wall jumpable");
+        //            moveDirection += wallDashForce * transform.forward + jumpspeed * 1.5f * transform.up;
+        //        }
+        //    }
+        //    if(!flag)
+        //    {
+        //        moveDirection += jumpMultiplier * jumpspeed * transform.up;
+        //    }
+        //    isGrounded = false;
+        //    AudioManager.instance.PlayAudio(FXID.jump, FXEntity.player, id);
+        //}
+        //if (isWallWalking && isJumping)
+        //{
+        //    moveDirection += (wallNormal + Vector3.Cross(Vector3.up,wallNormal) +Vector3.up).normalized * jumpMultiplier * jumpspeed;
+        //    AudioManager.instance.PlayAudio(FXID.wallJump, FXEntity.player, id);
+        //}
+        //rb.AddForce(moveDirection, ForceMode.VelocityChange);
         
         
     }
@@ -300,6 +265,7 @@ public class Player : MonoBehaviour
     {
         moveMultiplier = 1.75f;
         jumpMultiplier = 1.15f;
+        maxSpeedMultiplier = 1.75f;
         StartCoroutine(SpeedBoostEnded());
     }
     IEnumerator SpeedBoostEnded()
@@ -307,6 +273,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5f);
         moveMultiplier = 1f;
         jumpMultiplier = 1f;
+        maxSpeedMultiplier = 1f;
         hasItem = false;
     }
     private IEnumerator Respawn()

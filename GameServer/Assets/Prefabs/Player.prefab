@@ -118,21 +118,13 @@ MonoBehaviour:
   username: 
   rb: {fileID: 7346563564494385454}
   shootOrigin: {fileID: 904633796976257155}
-  isGrounded: 1
-  gravity: -9.81
-  moveSpeed: 1
-  jumpspeed: 5
+  moveMultiplier: 1
+  jumpMultiplier: 1
   health: 100
   maxHealth: 100
   projectileForceMultiplier: 10
-  groundDragForce: 5
-  airDragForce: 3
-  crouchDragForce: 1
-  wallDashForce: 1
   planarSpeed: 0
-  maxSpeed: 7
-  isWallWalking: 0
-  slidingOff: 0
+  maxSpeedMultiplier: 1
   weapons:
   - {fileID: 3150059016676306759}
   - {fileID: 1344876290118467454}
@@ -141,7 +133,6 @@ MonoBehaviour:
   wallNormal: {x: 0, y: 0, z: 0}
   playerMovement: {fileID: 5517461445132474578}
   affectedByExplosion: 0
-  debug: 0
 --- !u!54 &7346563564494385454
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -177,6 +168,16 @@ MonoBehaviour:
   maxSlopeAngle: 45
   rb: {fileID: 7346563564494385454}
   trivialDifference: 3
+  isGrounded: 1
+  isWallWalking: 0
+  slidingOff: 0
+  counterMovement: 4
+  slideCounterMovement: 4
+  moveSpeed: 15
+  jumpspeed: 5
+  maxSpeedConstant: 7
+  threshold: 1
+  debug: 0
 --- !u!1 &5541447919210231392
 GameObject:
   m_ObjectHideFlags: 0
