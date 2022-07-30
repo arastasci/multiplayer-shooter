@@ -182,18 +182,18 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("is crouching, applying countermovement");
 
-            rb.AddForce(moveSpeed * Time.fixedDeltaTime * -rb.velocity.normalized * slideCounterMovement, ForceMode.VelocityChange);
+            rb.AddForce(moveSpeed * Time.fixedDeltaTime * -rb.velocity.normalized * slideCounterMovement);
             return;
         }
         if (Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
         {
             Debug.Log("1, applying countermovement");
-            rb.AddForce(moveSpeed * transform.right * Time.deltaTime * -mag.x * counterMovement, ForceMode.VelocityChange);
+            rb.AddForce(moveSpeed * transform.right * Time.deltaTime * -mag.x * counterMovement);
         }
         if (Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f || (mag.y < -threshold && y > 0) || (mag.y > threshold && y < 0))
         {
             Debug.Log("2, applying countermovement");
-            rb.AddForce(moveSpeed * transform.forward * Time.deltaTime * -mag.y * counterMovement, ForceMode.VelocityChange);
+            rb.AddForce(moveSpeed * transform.forward * Time.deltaTime * -mag.y * counterMovement);
         }
         Vector3 velocity = rb.velocity;
         if (GetMagnitude(velocity.x,velocity.z) > maxSpeed)
