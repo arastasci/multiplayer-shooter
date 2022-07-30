@@ -169,8 +169,9 @@ MonoBehaviour:
   isGrounded: 1
   isWallWalking: 0
   slidingOff: 0
-  counterMovement: 0.7
-  slideCounterMovement: 1
+  counterMovement: 0.175
+  slideCounterMovement: 0.2
+  minSpeed: 0.2
   moveSpeed: 50
   jumpspeed: 5
   wallJumpMultiplier: 1

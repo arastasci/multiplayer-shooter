@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
     [SerializeField] float counterMovement = 0.3f;
     [SerializeField] float slideCounterMovement = 0.1f;
+    [SerializeField] float minSpeed = 0.3f;
     public float moveSpeed = 5f;
     public float jumpspeed = 5f;
 
@@ -123,6 +124,7 @@ public class PlayerMovement : MonoBehaviour
         if (playerInput.x < 0 && xMag < -maxSpeed) playerInput.x = 0;
         if (playerInput.z > 0 && yMag > maxSpeed) playerInput.z = 0;
         if (playerInput.z < 0 && yMag < -maxSpeed) playerInput.z = 0;
+        
 
         float multiplier = 1f, multiplierV = 1f;
 
@@ -176,24 +178,29 @@ public class PlayerMovement : MonoBehaviour
     void CounterMovement(float x, float y, Vector2 mag)
     {
         if (!isGrounded || isJumping) return;
-
+        if (planarSpeed < minSpeed)
+        {
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            return;
+        }
         // slow down sliding
         if (playerInput.isCrouching)
         {
             Debug.Log("is crouching, applying countermovement");
 
-            rb.AddForce(moveSpeed * Time.fixedDeltaTime * -rb.velocity.normalized * slideCounterMovement);
+            rb.AddForce(  moveSpeed * Time.deltaTime * -rb.velocity.normalized * slideCounterMovement, ForceMode.VelocityChange);
+          
             return;
         }
         if (Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
         {
             Debug.Log("1, applying countermovement");
-            rb.AddForce(moveSpeed * transform.right * Time.deltaTime * -mag.x * counterMovement);
+            rb.AddForce(moveSpeed * transform.right * Time.deltaTime * -mag.x * counterMovement, ForceMode.VelocityChange);
         }
         if (Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f || (mag.y < -threshold && y > 0) || (mag.y > threshold && y < 0))
         {
             Debug.Log("2, applying countermovement");
-            rb.AddForce(moveSpeed * transform.forward * Time.deltaTime * -mag.y * counterMovement);
+            rb.AddForce(moveSpeed * transform.forward * Time.deltaTime * -mag.y * counterMovement, ForceMode.VelocityChange);
         }
         Vector3 velocity = rb.velocity;
         if (GetMagnitude(velocity.x,velocity.z) > maxSpeed)
