@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
     public int maxHealth;
     public float projectileForceMultiplier = 10f;
     
-    public float planarSpeed;
     private PlayerInput playerInput;
 
     private int killCount = 0;
@@ -33,7 +32,7 @@ public class Player : MonoBehaviour
     public Weapon[] weapons = new Weapon[2];
     [HideInInspector] public int activeWeaponID;
     public Vector3 lastExplodedPosition;
-    public Vector3 wallNormal;
+    
     public PlayerMovement playerMovement;
     public bool affectedByExplosion = false;
     public void Initialize(int id, string username)

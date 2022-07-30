@@ -123,14 +123,12 @@ MonoBehaviour:
   health: 100
   maxHealth: 100
   projectileForceMultiplier: 10
-  planarSpeed: 0
   maxSpeedMultiplier: 1
   weapons:
   - {fileID: 3150059016676306759}
   - {fileID: 1344876290118467454}
   activeWeaponID: 0
   lastExplodedPosition: {x: 0, y: 0, z: 0}
-  wallNormal: {x: 0, y: 0, z: 0}
   playerMovement: {fileID: 5517461445132474578}
   affectedByExplosion: 0
 --- !u!54 &7346563564494385454
@@ -171,12 +169,16 @@ MonoBehaviour:
   isGrounded: 1
   isWallWalking: 0
   slidingOff: 0
-  counterMovement: 4
-  slideCounterMovement: 4
+  counterMovement: 0.7
+  slideCounterMovement: 1
   moveSpeed: 15
   jumpspeed: 5
-  maxSpeedConstant: 7
-  threshold: 1
+  wallJumpMultiplier: 1
+  wallJumpSpeed: 5
+  maxSpeedConstant: 12
+  threshold: 0.01
+  planarSpeed: 0
+  wallNormal: {x: 0, y: 0, z: 0}
   debug: 0
 --- !u!1 &5541447919210231392
 GameObject:

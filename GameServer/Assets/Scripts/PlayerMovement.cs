@@ -24,10 +24,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float slideCounterMovement = 0.1f;
     public float moveSpeed = 5f;
     public float jumpspeed = 5f;
+
+    public float wallJumpMultiplier = 1f;
+    public float wallJumpSpeed = 5f;
     float moveMultiplier = 1f;
     float jumpMultiplier = 1f;
     public float maxSpeedConstant = 7f;
     [SerializeField] float threshold = 1f;
+    public float planarSpeed;
+
+    public Vector3 wallNormal;
     float maxSpeed { get => maxSpeedConstant * player.maxSpeedMultiplier; set => maxSpeed = player.maxSpeedMultiplier * maxSpeedConstant; }
 
     PlayerInput playerInput;
@@ -43,12 +49,7 @@ public class PlayerMovement : MonoBehaviour
         float angle = Vector3.Angle(normal, Vector3.up);
         return angle < maxSlopeAngle;
     }
-    private bool IsDifferenceTrivial(Vector3 normal)
-    {
-        Debug.Log(normal);
-        float angle = Vector3.Angle(normal, lastNormalWJ);
-        return angle < trivialDifference;
-    }
+ 
     IEnumerator SlideOff()
     {
         yield return new WaitForSeconds(1f);
@@ -74,6 +75,8 @@ public class PlayerMovement : MonoBehaviour
     public void Move(PlayerInput input)
     {
 
+
+        //---------------------------------------
         playerInput = input;
         if (playerInput.isCrouching)
         {
@@ -91,10 +94,23 @@ public class PlayerMovement : MonoBehaviour
         Vector2 mag = FindVelRelativeToLook();
 
         float xMag = mag.x, yMag = mag.y;
-
+        planarSpeed = GetMagnitude(xMag, yMag);
         CounterMovement(inputDirection.x, inputDirection.y, mag);
 
-        if (playerInput.isJumping && isGrounded) Jump();
+        if (playerInput.isJumping) 
+        {
+            if (isGrounded){
+                Debug.Log("is jumping");
+
+                Jump();
+            }
+            else if (isWallWalking)
+            {
+                Debug.Log("is wall jumping");
+                WallJump();
+            }
+        } 
+        
 
 
         if (playerInput.isCrouching && isGrounded)
@@ -103,13 +119,18 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        if (playerInput.x > 0 && xMag > maxSpeed) playerInput.x = 0;
+        if (playerInput.x < 0 && xMag < -maxSpeed) playerInput.x = 0;
+        if (playerInput.z > 0 && yMag > maxSpeed) playerInput.z = 0;
+        if (playerInput.z < 0 && yMag < -maxSpeed) playerInput.z = 0;
+
         float multiplier = 1f, multiplierV = 1f;
 
-        if (!isGrounded)
-        {
-            multiplier = 0.5f;
-            multiplierV = 0.5f;
-        }
+        //if (!isGrounded && !isWallWalking)
+        //{
+        //    multiplier = 0.5f;
+        //    multiplierV = 0.5f;
+        //}
 
         if (isGrounded && playerInput.isCrouching) multiplierV = 0f;
         rb.AddForce(transform.forward * playerInput.z * moveSpeed * Time.fixedDeltaTime * multiplier * multiplierV, ForceMode.VelocityChange);
@@ -117,7 +138,26 @@ public class PlayerMovement : MonoBehaviour
     }
     void Jump()
     {
-        rb.AddForce(Vector3.up * jumpspeed * jumpMultiplier);
+        if(Physics.Raycast(player.shootOrigin.position,transform.forward,out RaycastHit hit, 5f))
+        {
+            if (IsWallJumpable(hit.normal))
+            {
+                rb.AddForce((transform.forward + Vector3.up * 4).normalized * wallJumpMultiplier * wallJumpSpeed, ForceMode.VelocityChange);
+            }
+        }
+        else
+        {
+            rb.AddForce(Vector3.up * jumpspeed * jumpMultiplier, ForceMode.VelocityChange);
+        }
+        
+        isGrounded = false;
+    }
+    void WallJump()
+    {
+        rb.AddForce(( transform.forward + wallNormal + Vector3.up ).normalized * jumpMultiplier * jumpspeed, ForceMode.VelocityChange);
+        
+        AudioManager.instance.PlayAudio(FXID.wallJump, FXEntity.player, player.id);
+        
     }
 
     Vector2 FindVelRelativeToLook()
@@ -140,20 +180,25 @@ public class PlayerMovement : MonoBehaviour
         // slow down sliding
         if (playerInput.isCrouching)
         {
-            rb.AddForce(moveSpeed * Time.deltaTime * -rb.velocity.normalized * counterMovement);
+            Debug.Log("is crouching, applying countermovement");
+
+            rb.AddForce(moveSpeed * Time.fixedDeltaTime * -rb.velocity.normalized * slideCounterMovement, ForceMode.VelocityChange);
             return;
         }
         if (Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
         {
+            Debug.Log("1, applying countermovement");
             rb.AddForce(moveSpeed * transform.right * Time.deltaTime * -mag.x * counterMovement, ForceMode.VelocityChange);
         }
         if (Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f || (mag.y < -threshold && y > 0) || (mag.y > threshold && y < 0))
         {
+            Debug.Log("2, applying countermovement");
             rb.AddForce(moveSpeed * transform.forward * Time.deltaTime * -mag.y * counterMovement, ForceMode.VelocityChange);
         }
         Vector3 velocity = rb.velocity;
         if (GetMagnitude(velocity.x,velocity.z) > maxSpeed)
         {
+            Debug.Log("velocity greater than maxSpeed, applying countermovement");
             float fallSpeed = velocity.y;
             Vector3 n = velocity.normalized * maxSpeed;
             rb.velocity = new Vector3(n.x, fallSpeed, n.z);
@@ -186,7 +231,7 @@ public class PlayerMovement : MonoBehaviour
                     player.affectedByExplosion = false;
                     lastCollider = col.collider;
                     isWallWalking = true;
-                    player.wallNormal = cp.normal;
+                    wallNormal = cp.normal;
                     rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
                     StartCoroutine(SlideOff());
                     break;
@@ -219,7 +264,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnCollisionExit(Collision collision)
     {
-        if(lastCollider == collision.collider)
+        if (lastCollider == collision.collider)
         {
             rb.useGravity = true;
             isWallWalking = false;
