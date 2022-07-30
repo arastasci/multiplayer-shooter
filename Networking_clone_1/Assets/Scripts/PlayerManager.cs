@@ -114,4 +114,11 @@ public class PlayerManager : MonoBehaviour
         activeWeapon = id;
         weapons[activeWeapon].SetActive(true);
     }
+    private void OnDestroy()
+    {
+        if(TryGetComponent<CameraController>(out cameraController))
+        {
+            cameraController.GoBackToPlayer();
+        }
+    }
 }

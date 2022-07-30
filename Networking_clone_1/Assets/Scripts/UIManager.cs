@@ -56,7 +56,7 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateSpeed(float speed)
     {
-        this.speed.text = String.Format("{0:0.##}", speed);
+        //this.speed.text = String.Format("{0:0.##}", speed);
         Debug.Log(speed);
     }
     public void ShowScoreBoard()
