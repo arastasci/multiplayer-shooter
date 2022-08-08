@@ -232,9 +232,6 @@ public class ServerSend
             {
                 Client client = Server.clients[i];
                 if (client.player == null) continue;
-                Debug.Log(client.id);
-                Debug.Log(client.player.GetKill());
-                Debug.Log(client.player.GetDeath());
                 packet.Write(client.player.id);
                 packet.Write(client.player.GetKill());
                 packet.Write(client.player.GetDeath());

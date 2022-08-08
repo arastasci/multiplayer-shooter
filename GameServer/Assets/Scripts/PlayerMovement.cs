@@ -101,13 +101,11 @@ public class PlayerMovement : MonoBehaviour
         if (playerInput.isJumping) 
         {
             if (isGrounded){
-                Debug.Log("is jumping");
 
                 Jump();
             }
             else if (isWallWalking)
             {
-                Debug.Log("is wall jumping");
                 WallJump();
             }
         } 
@@ -254,7 +252,6 @@ public class PlayerMovement : MonoBehaviour
             }
             if (IsFloor(normal) && !isAffectedBool)
             {
-                Debug.Log(player.affectedByExplosion);
                 player.affectedByExplosion = false;
 
                 isGrounded = true;

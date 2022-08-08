@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject startMenu;
     public InputField usernameField;
+    public InputField ipField;
     public GameObject gameUI;
     public GameObject scoreBoard;
     public Slider slider;
@@ -52,7 +53,8 @@ public class UIManager : MonoBehaviour
         Destroy(RotateWorldInMenu.instance);
         gameUI.SetActive(true);
         usernameField.interactable = false;
-        Client.instance.ConnectToServer();
+        ipField.interactable = false;
+        Client.instance.ConnectToServer(ipField.text);
     }
     public void UpdateSpeed(float speed)
     {

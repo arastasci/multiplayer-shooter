@@ -8,7 +8,7 @@ public class Client : MonoBehaviour
 {
     public static Client instance;
     public static int dataBufferSize = 4096;
-    public string ip = "127.0.0.1";
+    public string ip;
     public int port = 26950;
     public int myId = 0;
     public TCP tcp;
@@ -31,17 +31,18 @@ public class Client : MonoBehaviour
             Destroy(this);
         }
     }
-    private void Start()
-    {
-        tcp = new TCP();
-        udp = new UDP();
-    }
+
     private void OnApplicationQuit()
     {
         Disconnect();
     }
-    public void ConnectToServer()
+    public void ConnectToServer(string ip)
     {
+        string[] ipAndPort = ip.Split(':');
+        this.ip = ipAndPort[0];
+        port = int.Parse(ipAndPort[1]);
+        tcp = new TCP();
+        udp = new UDP();
         InitializeClientData();
         isConnected = true;
         tcp.Connect();
