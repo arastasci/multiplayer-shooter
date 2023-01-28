@@ -271,6 +271,26 @@ public class ServerSend
             SendTCPDataToAll(packet);
         }
     }
+
+    public static void Ping(int pingedClient)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.ping))
+        {
+            SendTCPData(pingedClient, packet);
+        }
+    }
+
+    public static void OthersPing(int pingedClient, int ping)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.clientPing))
+        {
+            packet.Write(ping);
+            foreach (Client c in Server.clients.Values)
+            {
+                if (c.id != pingedClient) SendTCPData(c.id,packet);
+            }
+        }
+    }
 }
 
 

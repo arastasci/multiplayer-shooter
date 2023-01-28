@@ -120,8 +120,10 @@ public class Server
                 {(int)ClientPackets.playerInput,ServerHandle.PlayerGetInput},
                 {(int)ClientPackets.playerFire, ServerHandle.PlayerFire },
                 {(int)ClientPackets.playerReload, ServerHandle.PlayerReload },
-                {(int)ClientPackets.playerChangedWeapon, ServerHandle.PlayerChangedWeapon }
-                
+                {(int)ClientPackets.playerChangedWeapon, ServerHandle.PlayerChangedWeapon },
+                {(int)ClientPackets.ping, ServerHandle.Ping},
+                {(int)ClientPackets.clientPing, ServerHandle.GetAndSendPing}
+
             };
         Debug.Log("Initialized packets.");
     }

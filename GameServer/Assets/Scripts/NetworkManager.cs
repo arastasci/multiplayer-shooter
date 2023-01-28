@@ -51,4 +51,22 @@ public class NetworkManager : MonoBehaviour
         
         return Instantiate(playerPrefab, FindSpawnPosition() , Quaternion.identity).GetComponent<Player>();
     }
+    
+    public IEnumerator Respawn(Player player)
+    {
+        player.gameObject.SetActive(false);
+        yield return new WaitForSeconds(5f);
+        player.gameObject.SetActive(true);
+        Debug.Log("set active");
+        player.transform.position = (instance.FindSpawnPosition()); ;
+        //rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        ServerSend.PlayerPosition(player);
+        player.health = player.maxHealth;
+        foreach(Weapon weapon in player.weapons)
+        {
+            weapon.Fill(player.id);
+        }
+        ServerSend.PlayerRespawned(player);
+    }
+    
 }

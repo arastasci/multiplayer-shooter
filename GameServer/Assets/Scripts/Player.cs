@@ -48,8 +48,17 @@ public class Player : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (health <= 0f) return;
+        if(rb.isKinematic) return;
 
+        if (transform.position.y < -8)
+        {
+            Die(id);
+            return;
+            
+        }
+        
+        if (health <= 0f) return;
+        
         
 
         playerMovement.Move(playerInput);
@@ -193,6 +202,16 @@ public class Player : MonoBehaviour
                 break;
         }
         ServerSend.PlayerWeaponInfo(id, weapons[activeWeaponID]);
+        int totalBulletCount = 0;
+        foreach(Weapon w in weapons)
+        {
+            totalBulletCount += w.bulletLeftTotal + w.bulletLeftInMag;
+        }
+
+        if (totalBulletCount == 0)
+        {
+            Die(id);
+        }
         
     }
     public void Reload()
@@ -240,17 +259,31 @@ public class Player : MonoBehaviour
         if(health <= 0f)
         {
 
-            Server.clients[byPlayer].player.IncrementKill();
-            IncrementDeath();
-            ServerSend.UpdateScoreBoard();
-            health = 0;
-            rb.isKinematic = true;
-            
-            
-            StartCoroutine(Respawn());
+           Die(byPlayer);
         }
 
         ServerSend.PlayerHealth(this, byPlayer);
+    }
+
+    private void Die(int byPlayer)
+    {
+        transform.position = new Vector3(0, 100, 0);
+        ServerSend.PlayerPosition(this);
+        if (byPlayer != id)
+        {
+            Server.clients[byPlayer].player.IncrementKill();
+        }
+        IncrementDeath();
+
+        ServerSend.UpdateScoreBoard();
+        health = 0;
+        rb.isKinematic = true;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative; 
+        moveMultiplier = 1f;
+        jumpMultiplier = 1f;
+        maxSpeedMultiplier = 1f;
+        
+        StartCoroutine(Respawn());
     }
 
     void GetHealthPack()
@@ -278,10 +311,15 @@ public class Player : MonoBehaviour
     private IEnumerator Respawn()
     {
         yield return new WaitForSeconds(5f);
-        transform.position = NetworkManager.instance.FindSpawnPosition();
+        rb.isKinematic = false;
+        transform.position = (NetworkManager.instance.FindSpawnPosition()); ;
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
         ServerSend.PlayerPosition(this);
         health = maxHealth;
-        rb.isKinematic = false;
+        foreach(Weapon weapon in weapons)
+        {
+            weapon.Fill(id);
+        }
         ServerSend.PlayerRespawned(this);
     }
     

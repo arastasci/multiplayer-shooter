@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using System.Collections.Generic;
 using System.Text;
-
-
+using UnityEngine;
 /// <summary>Sent from server to client.</summary>
 public enum ServerPackets
 {
@@ -30,7 +27,6 @@ public enum ServerPackets
     playAudio,
     ping,
     clientPing
-
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -40,10 +36,11 @@ public enum ClientPackets
     playerInput,
     playerFire,
     playerReload,
-    playerChangedWeapon, 
+    playerChangedWeapon,
     ping,
     clientPing
 }
+
 public class Packet : IDisposable
 {
     private List<byte> buffer;
@@ -378,7 +375,6 @@ public class Packet : IDisposable
     {
         return new Quaternion(ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos));
     }
-
     #endregion
 
     private bool disposed = false;

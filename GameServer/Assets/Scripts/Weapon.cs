@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class Weapon : MonoBehaviour
     public float firePeriod;
     public bool canReload = true;
     public bool canShoot = true;
+    public int maxBullet;
+    
     private void Awake()
     {
         bulletLeftTotal -= magSize;
@@ -24,8 +27,13 @@ public class Weapon : MonoBehaviour
         canReload = true;
         canShoot = true;
     }
-    
-    
+
+    public void Fill(int playerId)
+    {
+        bulletLeftTotal = maxBullet;
+        bulletLeftInMag = magSize;
+        ServerSend.PlayerWeaponInfo(playerId, this);
+    }
     public void Reload(int playerID)
     {
         if (canReload)
@@ -46,21 +54,7 @@ public class Weapon : MonoBehaviour
         }
         bulletLeftInMag--;
         StartCoroutine(ShootCooldown());
-        //if (bulletLeftInMag > 0)
-        //{
-        //    bulletLeftInMag--;
-
-        //    if (bulletLeftInMag == 0)
-        //    {
-        //        canShoot = false;
-        //        Reload(playerID);
-        //    }
-
-        //}
-        //else 
-        //{
-        //    Reload(playerID);  
-        //}
+        
     }
 
     IEnumerator ShootCooldown()
@@ -73,16 +67,10 @@ public class Weapon : MonoBehaviour
     IEnumerator WrappedReload(int playerID)
     {
         yield return new WaitForSeconds(reloadTime);
-        if(bulletLeftTotal <= magSize - bulletLeftInMag)
-        {
-            bulletLeftInMag += bulletLeftTotal;
-            bulletLeftTotal = 0;
-        }
-        else
-        {
-            bulletLeftTotal -= magSize- bulletLeftInMag;
-            bulletLeftInMag = magSize;
-        }
+        int bulletCount = Math.Min(bulletLeftTotal, magSize - bulletLeftInMag);
+        bulletLeftTotal -= bulletCount;
+        bulletLeftInMag += bulletCount;
+       
         if (bulletLeftTotal == 0)
         {
             canReload = false;
@@ -93,8 +81,6 @@ public class Weapon : MonoBehaviour
         }
         canShoot = true;
         ServerSend.PlayerWeaponInfo(playerID, this);
-
-
-
+        
     }
 }

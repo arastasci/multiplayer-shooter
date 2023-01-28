@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(PlayerInput input)
     {
-
+        
 
         //---------------------------------------
         playerInput = input;
@@ -143,11 +143,14 @@ public class PlayerMovement : MonoBehaviour
             if (IsWallJumpable(hit.normal))
             {
                 rb.AddForce((transform.forward + Vector3.up * 4).normalized * wallJumpMultiplier * wallJumpSpeed, ForceMode.VelocityChange);
+                Debug.Log("walljump");
             }
         }
         else
         {
             rb.AddForce(Vector3.up * jumpspeed * jumpMultiplier, ForceMode.VelocityChange);
+            Debug.Log("normal jump" + jumpMultiplier + " " + jumpspeed);
+
         }
         
         isGrounded = false;

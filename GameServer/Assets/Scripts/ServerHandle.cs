@@ -54,6 +54,14 @@ public class ServerHandle
         int newWeaponID = packet.ReadInt();
         Server.clients[fromClient].player.SetActiveWeapon(newWeaponID);
     }
-    
+    public static void Ping(int fromClient, Packet packet){
+        ServerSend.Ping(fromClient);
+    }
+
+    public static void GetAndSendPing(int fromClient, Packet packet)
+    {
+        int ping = packet.ReadInt();
+        ServerSend.OthersPing(fromClient, ping);
+    }
 
 }
