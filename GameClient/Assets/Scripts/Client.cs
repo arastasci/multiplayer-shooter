@@ -280,12 +280,13 @@ public class Client : MonoBehaviour
             {(int)ServerPackets.playerCrouch,ClientHandle.PlayerCrouch },
             {(int)ServerPackets.playAudio, ClientHandle.PlayAudio },
             {(int)ServerPackets.ping,ClientHandle.Ping},
-            {(int)ServerPackets.clientPing,ClientHandle.SetPing}
+            {(int)ServerPackets.clientPing,ClientHandle.SetPing},
+            {(int)ServerPackets.selfKill, ClientHandle.SelfKill}
         };
         Debug.Log("Initialized packets.");
     }
 
-    private void Disconnect()
+    public void Disconnect()
     {
         if (isConnected)
         {

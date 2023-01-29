@@ -232,7 +232,7 @@ MonoBehaviour:
   firePeriod: 1
   canReload: 0
   canShoot: 0
-  maxBullet: 25
+  maxBullet: 20
 --- !u!1 &8283308569662294177
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,4 +314,4 @@ MonoBehaviour:
   firePeriod: 0.5
   canReload: 0
   canShoot: 0
-  maxBullet: 14
+  maxBullet: 7

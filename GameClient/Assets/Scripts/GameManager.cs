@@ -73,4 +73,12 @@ public class GameManager : MonoBehaviour
         spawner.GetComponent<ItemSpawner>().Initialize(spawnerID,itemType,hasItem);
         itemSpawners.Add(spawnerID, spawner.GetComponent<ItemSpawner>());
     }
+
+    public void ClearDictionaries()
+    {
+        players.Clear();
+        projectiles.Clear();
+        itemSpawners.Clear();
+    }
+    
 }

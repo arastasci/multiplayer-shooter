@@ -25,6 +25,7 @@ public class ItemSpawner : MonoBehaviour
     {
         this.spawnerID = spawnerID;
         this.hasItem = hasItem;
+        currentItemType = itemType;
         itemPrefabs[itemType].SetActive(hasItem);
         basePosition = transform.position;
     }
@@ -33,6 +34,8 @@ public class ItemSpawner : MonoBehaviour
     {
         hasItem = false;
         itemPrefabs[currentItemType].SetActive(false);
+        Debug.Log("Item picked up of type: " + currentItemType );
+
     }
     public void ItemSpawned(int itemType)
     {
@@ -40,6 +43,7 @@ public class ItemSpawner : MonoBehaviour
         
         hasItem = true;
         itemPrefabs[itemType].SetActive(true);
+        Debug.Log("Item spawned of type: " + itemType );
         currentItemType = itemType;
     }
 }

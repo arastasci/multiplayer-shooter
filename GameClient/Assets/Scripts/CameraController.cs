@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +25,10 @@ public class CameraController : MonoBehaviour
     private void Update()
     {
 
-        if(Input.GetKeyDown(KeyCode.Escape)) ToggleCursorMode();
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            ToggleCursorMode();
+        }
         if (cursorLocked)
         {
             Look();
@@ -62,10 +66,11 @@ public class CameraController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
         player.transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
     }
-    private void ToggleCursorMode()
+    private void ToggleCursorMode(bool flag = true)
     {
+        
         Cursor.visible = !Cursor.visible;
-        if (Cursor.lockState == CursorLockMode.None)
+        if (Cursor.lockState == CursorLockMode.None && flag)
         {
             Cursor.lockState = CursorLockMode.Locked;
             cursorLocked = true;
@@ -75,5 +80,10 @@ public class CameraController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             cursorLocked = false;
         }
+    }
+
+    private void OnDisable()
+    {
+        ToggleCursorMode(false);
     }
 }

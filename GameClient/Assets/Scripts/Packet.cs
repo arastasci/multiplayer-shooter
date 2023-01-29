@@ -26,7 +26,8 @@ public enum ServerPackets
     playerCrouch,
     playAudio,
     ping,
-    clientPing
+    clientPing,
+    selfKill
 }
 
 /// <summary>Sent from client to server.</summary>

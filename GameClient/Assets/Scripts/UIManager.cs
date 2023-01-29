@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class UIManager : MonoBehaviour
     public InputField ipField;
     public GameObject gameUI;
     public GameObject scoreBoard;
+    [SerializeField] private GameObject mainMenu;
+
     public Slider slider;
     [SerializeField] TextMeshProUGUI healthPoint;
     [SerializeField] TextMeshProUGUI ammoInfo;
@@ -35,7 +38,14 @@ public class UIManager : MonoBehaviour
         
         
     }
-   
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            instance.ToggleMenu();
+        }
+    }
 
     public void UpdateHealth(int health)
     {
@@ -50,7 +60,7 @@ public class UIManager : MonoBehaviour
     public void ConnectToServer()
     {
         startMenu.SetActive(false);
-        Destroy(RotateWorldInMenu.instance);
+        RotateWorldInMenu.instance.enabled = false;
         gameUI.SetActive(true);
         usernameField.interactable = false;
         ipField.interactable = false;
@@ -77,6 +87,11 @@ public class UIManager : MonoBehaviour
         killerDisplay.text = String.Format("{0} {1}!", killerName,killStrings[UnityEngine.Random.Range(0,killStrings.Length)]);
         
     }
+
+    public void DisplaySelfKill()
+    {
+        hud.SetActive(false);
+    }
     public void HideKiller()
     {
         hud.SetActive(true);
@@ -85,9 +100,21 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void SetPing(int ping)
+    public void ToggleMenu()
     {
-        
+        mainMenu.SetActive(!mainMenu.activeInHierarchy);
+        PlayerController controller = GameManager.players[Client.instance.myId].playerController;
+        controller.GetComponentInChildren<CameraController>().enabled =
+            !controller.GetComponentInChildren<CameraController>().enabled;
+        controller.enabled = !controller.enabled;
+
+    }
+
+    public void ExitGame()
+    {
+        Client.instance.Disconnect();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GameManager.instance.ClearDictionaries();
     }
     
 }

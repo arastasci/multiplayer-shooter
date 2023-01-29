@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
 
     void GetInput()
     {
+        
         if (Input.GetKeyDown(KeyCode.Alpha1) && weapon != 0)
         {
             weapon = 0;

@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
     public int maxHealth;
     public MeshRenderer model;
     [SerializeField] GameObject[] weapons = new GameObject[2];
-    PlayerController playerController;
+    public PlayerController playerController;
     CameraController cameraController;
     public ScoreData score;
     int activeWeapon = 1;
@@ -82,10 +82,19 @@ public class PlayerManager : MonoBehaviour
             playerController.enabled = false;
             cameraController.LockToKiller(byPlayer);
             // make cam follow killer CM
+            
             UIManager.instance.DisplayKiller(GameManager.players[byPlayer].username);
         }
         
-
+    }
+    public void SelfKill()
+    {
+        SetMesh(false);
+        weapons[activeWeapon].SetActive(false);
+        CameraSwitcher.instance.SwitchCameras();
+        playerController.enabled = false;
+        UIManager.instance.DisplaySelfKill();
+        
     }
     public void Crouch(bool state)
     {

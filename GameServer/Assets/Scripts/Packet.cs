@@ -29,7 +29,8 @@ public enum ServerPackets
     playerCrouch,
     playAudio,
     ping,
-    clientPing
+    clientPing,
+    selfkill
 
 }
 

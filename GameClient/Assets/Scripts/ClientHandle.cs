@@ -183,4 +183,10 @@ public class ClientHandle : MonoBehaviour
     {
         MeasurePing.instance.Ping();
     }
+
+    public static void SelfKill(Packet packet)
+    {
+        GameManager.players[Client.instance.myId].SelfKill();
+        
+    }
 }

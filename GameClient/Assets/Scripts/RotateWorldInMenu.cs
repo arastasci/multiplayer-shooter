@@ -14,7 +14,7 @@ public class RotateWorldInMenu : MonoBehaviour
     {
         transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
     }
-    private void OnDestroy()
+    private void OnDisable()
     {
         transform.rotation = Quaternion.Euler(0, 0, 0);
     }

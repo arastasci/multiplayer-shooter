@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -267,11 +268,17 @@ public class Player : MonoBehaviour
 
     private void Die(int byPlayer)
     {
+        bool isSelfKill = false;
         transform.position = new Vector3(0, 100, 0);
         ServerSend.PlayerPosition(this);
         if (byPlayer != id)
         {
             Server.clients[byPlayer].player.IncrementKill();
+        }
+        else
+        {
+            ServerSend.SelfKill(id);
+            isSelfKill = true;
         }
         IncrementDeath();
 
@@ -283,7 +290,7 @@ public class Player : MonoBehaviour
         jumpMultiplier = 1f;
         maxSpeedMultiplier = 1f;
         
-        StartCoroutine(Respawn());
+        StartCoroutine(Respawn(isSelfKill));
     }
 
     void GetHealthPack()
@@ -308,7 +315,7 @@ public class Player : MonoBehaviour
         maxSpeedMultiplier = 1f;
         hasItem = false;
     }
-    private IEnumerator Respawn()
+    private IEnumerator Respawn(bool isSelfKill)
     {
         yield return new WaitForSeconds(5f);
         rb.isKinematic = false;
@@ -320,6 +327,8 @@ public class Player : MonoBehaviour
         {
             weapon.Fill(id);
         }
+        if(isSelfKill)
+        ServerSend.SelfKill(id);
         ServerSend.PlayerRespawned(this);
     }
     

@@ -272,6 +272,15 @@ public class ServerSend
         }
     }
 
+    public static void SelfKill(int player)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.selfkill))
+        {
+            
+            SendTCPData(player,packet);
+        }
+    }
+
     public static void Ping(int pingedClient)
     {
         using (Packet packet = new Packet((int)ServerPackets.ping))

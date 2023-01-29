@@ -43,11 +43,14 @@ public class ItemSpawner : MonoBehaviour
         yield return new WaitForSeconds(10f);
         itemType = (Item)Random.Range(0, 2);
         hasItem = true;
+        Debug.Log("Item spawned of type " + itemType);
         ServerSend.ItemSpawned(spawnerID, (int)itemType);
     }
     private void ItemPickedUp(int byPlayer) {
         hasItem = false;
         ServerSend.ItemPickedUp(spawnerID,byPlayer);
+        Debug.Log("Item picked up of type " + itemType);
+
         StartCoroutine(SpawnItem());
     }
 }
