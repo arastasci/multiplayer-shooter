@@ -45,6 +45,7 @@ public class ClientHandle : MonoBehaviour
         int id = packet.ReadInt();
         Quaternion rotation = packet.ReadQuaternion();
         GameManager.players[id].transform.rotation = rotation;
+        GameManager.players[id].SetActiveWeaponRotation(rotation);
     }
     public static void PlayerCrouch(Packet packet)
     {

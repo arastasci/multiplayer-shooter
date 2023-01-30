@@ -228,11 +228,11 @@ MonoBehaviour:
   magSize: 5
   reloadTime: 1.25
   bulletLeftInMag: 0
-  bulletLeftTotal: 20
+  bulletLeftTotal: 55
   firePeriod: 1
   canReload: 0
   canShoot: 0
-  maxBullet: 20
+  maxBullet: 50
 --- !u!1 &8283308569662294177
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,11 +307,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  magSize: 7
-  reloadTime: 1.5
+  magSize: 3
+  reloadTime: 0.5
   bulletLeftInMag: 0
-  bulletLeftTotal: 14
+  bulletLeftTotal: 6
   firePeriod: 0.5
   canReload: 0
   canShoot: 0
-  maxBullet: 7
+  maxBullet: 3

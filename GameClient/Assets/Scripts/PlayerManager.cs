@@ -13,7 +13,7 @@ public class PlayerManager : MonoBehaviour
     public PlayerController playerController;
     CameraController cameraController;
     public ScoreData score;
-    int activeWeapon = 1;
+    public int activeWeapon = 1;
     [SerializeField] AudioSource audioSource;
     public bool isGrounded;
     public bool isAffectedByExplosion;
@@ -134,6 +134,10 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void SetActiveWeaponRotation(Quaternion rotation)
+    {
+        weapons[activeWeapon].transform.rotation = rotation;
+    }
     private void SetMesh(bool value)
     {
         foreach (MeshRenderer meshRenderer in meshRenderers)
