@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -23,7 +24,8 @@ public class PlayerManager : MonoBehaviour
     private MeshRenderer[] meshRenderers;
     private Transform glasses;
     int currentClip = -1;
-    
+    [SerializeField] private TextMesh playerNameMesh;
+    public static bool isDead;
     public void Initialize(int id, string userName)
     {
         this.id = id;
@@ -36,11 +38,16 @@ public class PlayerManager : MonoBehaviour
             playerController = GetComponent<PlayerController>();
             cameraController = transform.Find("Camera").GetComponent<CameraController>();
         }
-        else glasses = transform.GetChild(0).GetChild(0);
+        else
+        {
+            glasses = transform.GetChild(0).GetChild(0);
+            playerNameMesh.text = userName;
+
+        }
 
         meshRenderers = GetComponentsInChildren<MeshRenderer>();
         score = new ScoreData(id, 0, 0);
-        
+
     }
 
     public void PlayAudio(int fxID)
@@ -87,9 +94,10 @@ public class PlayerManager : MonoBehaviour
             playerController.enabled = false;
             cameraController.LockToKiller(byPlayer);
             // make cam follow killer CM
-            
+            isDead = true;
             UIManager.instance.DisplayKiller(GameManager.players[byPlayer].username);
         }
+        UIManager.instance.LogKill(byPlayer,id, GameManager.players[byPlayer].activeWeapon);
         
     }
     public void SelfKill()
@@ -119,9 +127,12 @@ public class PlayerManager : MonoBehaviour
         if(id == Client.instance.myId)
         {
             playerController.enabled = true;
+            if(!UIManager.instance.mainMenu.activeInHierarchy)
+            cameraController.enabled = true;
             cameraController.GoBackToPlayer();
             SetHealth(maxHealth, id); // id totally useless here, should refactor the code later
             UIManager.instance.HideKiller();
+            isDead = false;
         }
     }
 
@@ -133,7 +144,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        if(TryGetComponent<CameraController>(out cameraController))
+        if(TryGetComponent(out cameraController))
         {
             cameraController.GoBackToPlayer();
         }
@@ -142,9 +153,12 @@ public class PlayerManager : MonoBehaviour
     public void SetActiveWeaponRotation(Quaternion rotation)
     {
         weapons[activeWeapon].transform.rotation = rotation;
-        Vector3 euler = glasses.rotation.eulerAngles;
-        glasses.rotation = Quaternion.Euler(new Vector3(Mathf.Clamp(euler.x, -45, 45),
-            Mathf.Clamp(euler.y, -45, 45), Mathf.Clamp(euler.z, -45, 45)));
+            //Vector3 weaponForward = weapons[activeWeapon].transform.forward;
+        //glasses.forward = new Vector3();
+
+        // Vector3 euler = rotation.eulerAngles;
+        // glasses.localRotation = Quaternion.Euler(new Vector3(Mathf.Clamp(euler.x, -45, 45),
+        //     0,0));
     }
     private void SetMesh(bool value)
     {

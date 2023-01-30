@@ -32,6 +32,7 @@ public class Weapon : MonoBehaviour
     {
         bulletLeftTotal = maxBullet;
         bulletLeftInMag = magSize;
+        canReload = true;
         ServerSend.PlayerWeaponInfo(playerId, this);
     }
     public void Reload(int playerID)

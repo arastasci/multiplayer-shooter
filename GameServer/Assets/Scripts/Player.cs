@@ -71,86 +71,6 @@ public class Player : MonoBehaviour
     {
         rb.AddForce(Vector3.down * Time.fixedDeltaTime * 15);
 
-
-
-
-
-        //if (slidingOff)
-        //{
-        //    rb.AddForce(Vector3.down * Time.deltaTime * 15);
-        //}
-        //if (playerInput.isCrouching)
-        //{
-        //    Crouch();
-        //    ServerSend.PlayerCrouch(this, true);
-        //    return;
-        //}
-        //else if(!playerInput.isCrouching && isCrouching)
-        //{
-        //    StopCrouch();
-        //    ServerSend.PlayerCrouch(this, false);
-        //}
-
-        //rb.AddForce(Vector3.down * Time.deltaTime * 10);
-
-        //moveDirection = Vector3.zero;
-        //isJumping = playerInput.isJumping;
-        //Vector3 velocity = rb.velocity;
-        //planarSpeed = GetMagnitude(velocity.x, velocity.z);
-        //if (inputDirection.magnitude == 0)
-        //{
-        //    isMoving = false;
-        //}
-        //else
-        //{
-        //    isMoving = true;
-        //    AudioManager.instance.PlayAudio(FXID.walk, FXEntity.player, id);
-        //}
-        //if (!isMoving && planarSpeed > 0f)
-        //{
-        //    CounterMovement(velocity,airDragForce,groundDragForce);
-        //}
-        
-
-        //debug = planarSpeed > maxSpeed;
-        //if (!debug)
-        //{
-        //    moveDirection = transform.right * inputDirection.x + transform.forward * inputDirection.y;
-        //    moveDirection *= moveSpeed * moveMultiplier;
-        //}
-        ////else if(!affectedByExplosion)
-        ////{
-        ////    rb.velocity = new Vector3(velocity.normalized.x * maxSpeed, velocity.y, velocity.normalized.z * maxSpeed);
-        ////}
-        
-
-        //if (isGrounded && isJumping && !isWallWalking)
-        //{
-        //    bool flag = false;
-        //    if (Physics.Raycast(shootOrigin.position, transform.forward,out RaycastHit hit,8f))
-        //    {
-                
-
-        //        if (PlayerMovement.IsWallJumpable(hit.normal))
-        //        {
-        //            flag = true;
-        //            Debug.Log("wall jumpable");
-        //            moveDirection += wallDashForce * transform.forward + jumpspeed * 1.5f * transform.up;
-        //        }
-        //    }
-        //    if(!flag)
-        //    {
-        //        moveDirection += jumpMultiplier * jumpspeed * transform.up;
-        //    }
-        //    isGrounded = false;
-        //    AudioManager.instance.PlayAudio(FXID.jump, FXEntity.player, id);
-        //}
-        //if (isWallWalking && isJumping)
-        //{
-        //    moveDirection += (wallNormal + Vector3.Cross(Vector3.up,wallNormal) +Vector3.up).normalized * jumpMultiplier * jumpspeed;
-        //    AudioManager.instance.PlayAudio(FXID.wallJump, FXEntity.player, id);
-        //}
-        //rb.AddForce(moveDirection, ForceMode.VelocityChange);
         
         
     }
@@ -204,16 +124,16 @@ public class Player : MonoBehaviour
                 break;
         }
         ServerSend.PlayerWeaponInfo(id, weapons[activeWeaponID]);
-        int totalBulletCount = 0;
+        
         foreach(Weapon w in weapons)
         {
-            totalBulletCount += w.bulletLeftTotal + w.bulletLeftInMag;
+            if (w.bulletLeftTotal + w.bulletLeftInMag == 0)
+            {
+                w.Fill(id);
+            }
         }
 
-        if (totalBulletCount == 0)
-        {
-            Die(id);
-        }
+        
         
     }
     public void Reload()

@@ -15,14 +15,19 @@ public class UIManager : MonoBehaviour
     public InputField ipField;
     public GameObject gameUI;
     public GameObject scoreBoard;
-    [SerializeField] private GameObject mainMenu;
-
+    [SerializeField] public GameObject mainMenu;
+    [SerializeField] private Transform killLog;
+    [SerializeField] private GameObject killPrefab;
     public Slider slider;
     [SerializeField] TextMeshProUGUI healthPoint;
     [SerializeField] TextMeshProUGUI ammoInfo;
     [SerializeField] GameObject hud;
     [SerializeField] TextMeshProUGUI killerDisplay;
     [SerializeField] TextMeshProUGUI speed;
+
+    [SerializeField] private Sprite rocketImage;
+    [SerializeField] private Sprite pistolImage;
+    
     string[] killStrings = { "pwned you","rizzed you","fragged you" };
     private void Awake()
     {
@@ -64,6 +69,10 @@ public class UIManager : MonoBehaviour
         gameUI.SetActive(true);
         usernameField.interactable = false;
         ipField.interactable = false;
+        if (ipField.text == "t")
+        {
+            Client.instance.ConnectToServer("127.0.0.1:26950");
+        }else
         Client.instance.ConnectToServer(ipField.text);
     }
     public void UpdateSpeed(float speed)
@@ -100,14 +109,34 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void ToggleMenu()
+    public void ToggleMenu(bool gameStarts = false)
     {
+     
         mainMenu.SetActive(!mainMenu.activeInHierarchy);
+        if (PlayerManager.isDead) return;
         PlayerController controller = GameManager.players[Client.instance.myId].playerController;
         controller.GetComponentInChildren<CameraController>().enabled =
             !controller.GetComponentInChildren<CameraController>().enabled;
         controller.enabled = !controller.enabled;
 
+    }
+
+    public void LogKill(int killer, int victim, int weapon)
+    {
+        KillLog killRow = Instantiate(killPrefab, killLog).GetComponent<KillLog>();
+        killRow.Killer = 
+            GameManager.players[killer]
+            .username;
+        killRow.Victim = GameManager.players[victim].username;
+        switch (weapon)
+        {
+            case 0:
+                killRow.Weapon = pistolImage;
+                break;
+            case 1:
+                killRow.Weapon = rocketImage;
+                break;
+        }
     }
 
     public void ExitGame()

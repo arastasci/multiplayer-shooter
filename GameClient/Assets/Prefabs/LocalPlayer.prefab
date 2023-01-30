@@ -57,15 +57,19 @@ MonoBehaviour:
   weapons:
   - {fileID: 2765808842032654718}
   - {fileID: 6585750508739216661}
+  playerController: {fileID: 0}
+  cameraController: {fileID: 0}
   score:
     deathCount: 0
     killCount: 0
     id: 0
     row: {fileID: 0}
+  activeWeapon: 1
   audioSource: {fileID: 6120435676165102789}
   isGrounded: 0
   isAffectedByExplosion: 0
   sounds: []
+  playerNameMesh: {fileID: 0}
 --- !u!114 &-2793486134710728935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,6 +408,7 @@ GameObject:
   - component: {fileID: 2456059026304698432}
   - component: {fileID: 5615306965640383958}
   - component: {fileID: 1205287333508057774}
+  - component: {fileID: 5020018102681799695}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -474,6 +479,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &5020018102681799695
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3828437336976340345}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3989575901433773424
 GameObject:
   m_ObjectHideFlags: 0
