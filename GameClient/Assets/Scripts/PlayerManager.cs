@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -11,7 +13,7 @@ public class PlayerManager : MonoBehaviour
     public MeshRenderer model;
     [SerializeField] GameObject[] weapons = new GameObject[2];
     public PlayerController playerController;
-    CameraController cameraController;
+    public CameraController cameraController;
     public ScoreData score;
     public int activeWeapon = 1;
     [SerializeField] AudioSource audioSource;
@@ -19,19 +21,22 @@ public class PlayerManager : MonoBehaviour
     public bool isAffectedByExplosion;
     public AudioClip[] sounds;
     private MeshRenderer[] meshRenderers;
+    private Transform glasses;
     int currentClip = -1;
+    
     public void Initialize(int id, string userName)
     {
         this.id = id;
         username = userName;
         health = maxHealth;
-        if (id == Client.instance.myId) 
+        if (id == Client.instance.myId)
         {
             UIManager.instance.slider.maxValue = maxHealth;
             UIManager.instance.UpdateHealth(maxHealth);
             playerController = GetComponent<PlayerController>();
             cameraController = transform.Find("Camera").GetComponent<CameraController>();
         }
+        else glasses = transform.GetChild(0).GetChild(0);
 
         meshRenderers = GetComponentsInChildren<MeshRenderer>();
         score = new ScoreData(id, 0, 0);
@@ -137,6 +142,9 @@ public class PlayerManager : MonoBehaviour
     public void SetActiveWeaponRotation(Quaternion rotation)
     {
         weapons[activeWeapon].transform.rotation = rotation;
+        Vector3 euler = glasses.rotation.eulerAngles;
+        glasses.rotation = Quaternion.Euler(new Vector3(Mathf.Clamp(euler.x, -45, 45),
+            Mathf.Clamp(euler.y, -45, 45), Mathf.Clamp(euler.z, -45, 45)));
     }
     private void SetMesh(bool value)
     {

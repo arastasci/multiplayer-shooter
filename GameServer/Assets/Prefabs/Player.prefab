@@ -225,11 +225,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
-  magSize: 5
-  reloadTime: 1.25
+  magSize: 50
+  reloadTime: 0
   bulletLeftInMag: 0
-  bulletLeftTotal: 55
-  firePeriod: 1
+  bulletLeftTotal: 50
+  firePeriod: 0
   canReload: 0
   canShoot: 0
   maxBullet: 50
@@ -308,10 +308,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   magSize: 3
-  reloadTime: 0.5
+  reloadTime: 0
   bulletLeftInMag: 0
-  bulletLeftTotal: 6
-  firePeriod: 0.5
+  bulletLeftTotal: 3
+  firePeriod: 0
   canReload: 0
   canShoot: 0
   maxBullet: 3

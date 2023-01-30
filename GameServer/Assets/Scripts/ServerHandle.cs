@@ -25,7 +25,9 @@ public class ServerHandle
         playerInput.isJumping = packet.ReadBool();
         playerInput.isCrouching = packet.ReadBool();
         Quaternion rotation = packet.ReadQuaternion();
-        Server.clients[_fromClient].player.SetInput(playerInput, rotation);
+        Quaternion weaponRotation = packet.ReadQuaternion();
+        Server.clients[_fromClient].player.SetInput(playerInput, rotation, weaponRotation);
+        
     }
     public static void PlayerShoot(int _fromClient, Packet packet)
     {

@@ -104,7 +104,7 @@ public class ServerSend
         {
             packet.Write(player.id);
             packet.Write(player.transform.rotation);
-
+            packet.Write(player.weaponRotation);
             SendUDPDataToAll(player.id, packet);
         }
     }
@@ -293,6 +293,7 @@ public class ServerSend
     {
         using (Packet packet = new Packet((int)ServerPackets.clientPing))
         {
+            packet.Write(pingedClient);
             packet.Write(ping);
             foreach (Client c in Server.clients.Values)
             {

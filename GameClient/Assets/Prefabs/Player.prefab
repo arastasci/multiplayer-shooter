@@ -55,11 +55,14 @@ MonoBehaviour:
   weapons:
   - {fileID: 643950288739655065}
   - {fileID: 8542993733083101216}
+  playerController: {fileID: 0}
+  cameraController: {fileID: 0}
   score:
     deathCount: 0
     killCount: 0
     id: 0
     row: {fileID: 0}
+  activeWeapon: 1
   audioSource: {fileID: 3210214553997887431}
   isGrounded: 0
   isAffectedByExplosion: 0
@@ -203,7 +206,7 @@ GameObject:
   - component: {fileID: 8520316264648437056}
   - component: {fileID: 8633399492066782921}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Glasses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,7 +220,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3039873958932399936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.498, z: 0.319}
+  m_LocalPosition: {x: 0, y: 0.498, z: 0.48}
   m_LocalScale: {x: 0.7, y: 0.2, z: 0.4}
   m_Children: []
   m_Father: {fileID: 2456059026304698432}

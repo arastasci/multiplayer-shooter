@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     public float maxSpeedMultiplier;
 
     bool hasItem = false;
-    
+    public Quaternion weaponRotation;
     
     public Weapon[] weapons = new Weapon[2];
     [HideInInspector] public int activeWeaponID;
@@ -155,10 +155,12 @@ public class Player : MonoBehaviour
         
     }
 
-    public void SetInput(PlayerInput input, Quaternion rotation)
+    public void SetInput(PlayerInput input, Quaternion rotation, Quaternion weaponRotation)
     {
         playerInput = input;
         transform.rotation = rotation;
+        this.weaponRotation = weaponRotation;
+
     }
     #region shoot
     public void Shoot(Vector3 direction)
@@ -325,6 +327,8 @@ public class Player : MonoBehaviour
         foreach(Weapon weapon in weapons)
         {
             weapon.Fill(id);
+            weapon.canShoot = true;
+            
         }
         if(isSelfKill)
         ServerSend.SelfKill(id);

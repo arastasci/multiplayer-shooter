@@ -36,6 +36,7 @@ public class ClientSend : MonoBehaviour
             _packet.Write(playerInput.isJumping);
             _packet.Write(playerInput.isCrouching);
             _packet.Write(GameManager.players[Client.instance.myId].transform.rotation);
+            _packet.Write(GameManager.players[Client.instance.myId].cameraController.transform.rotation);
             SendUDPData(_packet);
         }
     }

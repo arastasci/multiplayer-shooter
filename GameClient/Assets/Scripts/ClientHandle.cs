@@ -44,8 +44,10 @@ public class ClientHandle : MonoBehaviour
     {
         int id = packet.ReadInt();
         Quaternion rotation = packet.ReadQuaternion();
+        Quaternion weaponRotation = packet.ReadQuaternion();
         GameManager.players[id].transform.rotation = rotation;
-        GameManager.players[id].SetActiveWeaponRotation(rotation);
+        GameManager.players[id].SetActiveWeaponRotation(weaponRotation);
+        
     }
     public static void PlayerCrouch(Packet packet)
     {
@@ -176,8 +178,10 @@ public class ClientHandle : MonoBehaviour
 
     public static void SetPing(Packet packet)
     {
-        
-        MeasurePing.instance.SetPing(GameManager.players[packet.ReadInt()], packet.ReadInt());
+        int id = packet.ReadInt();
+        int ping = packet.ReadInt();
+        Debug.Log(id + " " + ping);
+        MeasurePing.instance.SetPing(GameManager.players[id], ping);
     }
 
     public static void Ping(Packet packet)
