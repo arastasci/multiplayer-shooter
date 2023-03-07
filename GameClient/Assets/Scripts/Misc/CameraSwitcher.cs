@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Class for switching cameras when the situation of the local player changes.
+/// </summary>
 public class CameraSwitcher : MonoBehaviour
 {
     public static CameraSwitcher instance;

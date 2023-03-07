@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class consists of <seealso cref="Server.PacketHandler"/> methods.
+/// </summary>
 public class ServerHandle
 {
     public static void WelcomeReceived(int _fromClient, Packet _packet)
@@ -29,18 +32,7 @@ public class ServerHandle
         Server.clients[_fromClient].player.SetInput(playerInput, rotation, weaponRotation);
         
     }
-    public static void PlayerShoot(int _fromClient, Packet packet)
-    {
-        Vector3 direction = packet.ReadVector3();
 
-        Server.clients[_fromClient].player.Shoot(direction);
-    }
-
-    public static void PlayerLaunchProjectile(int _fromClient, Packet packet)
-    {
-        Vector3 direction = packet.ReadVector3();
-        Server.clients[_fromClient].player.LaunchProjectile(direction);
-    }
     
     public static void PlayerFire(int fromClient, Packet packet)
     {
@@ -56,10 +48,15 @@ public class ServerHandle
         int newWeaponID = packet.ReadInt();
         Server.clients[fromClient].player.SetActiveWeapon(newWeaponID);
     }
+
     public static void Ping(int fromClient, Packet packet){
         ServerSend.Ping(fromClient);
     }
-
+    /// <summary>
+    /// Gets the ping measured by the client and sends it to all clients for it to be displayed in the scoreboard.
+    /// </summary>
+    /// <param name="fromClient"></param>
+    /// <param name="packet"></param>
     public static void GetAndSendPing(int fromClient, Packet packet)
     {
         int ping = packet.ReadInt();

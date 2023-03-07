@@ -26,7 +26,7 @@ public class GameSettings : MonoBehaviour
         AudioListener.volume = PlayerPrefs.GetFloat("volume");
 
     }
-
+    // tied to a Unity Event
     public void VolumeValueChanged(Single volume)
     {
         PlayerPrefs.SetFloat("volume", volume);

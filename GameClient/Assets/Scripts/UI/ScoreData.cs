@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
-[Serializable]
+
+/// <summary>
+/// This is mainly a data storage class holding the score of players.
+/// </summary>
 public class ScoreData { 
     public int deathCount;
     public int killCount;

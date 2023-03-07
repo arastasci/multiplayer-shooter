@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-
+        // if right-clicked, toggle cursor lock mode (to test in editor, must remove later)
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             ToggleCursorMode();
@@ -37,7 +37,7 @@ public class CameraController : MonoBehaviour
         
         Debug.DrawRay(transform.position, transform.forward * 2, Color.red);
     }
-
+ 
     public void LockToKiller(int playerID)
     {
         killer = GameManager.players[playerID];
@@ -45,6 +45,10 @@ public class CameraController : MonoBehaviour
         transform.localRotation = killCamAngle;
         transform.localPosition = killCamOffset;
     }
+
+    /// <summary>
+    /// After respawning, makes the camera the child of the local player once again. (It was locked to the killer)
+    /// </summary>
     public void GoBackToPlayer()
     {
         killer = null;
@@ -52,8 +56,8 @@ public class CameraController : MonoBehaviour
         transform.localRotation = Quaternion.identity;
         transform.localPosition = basePosition;
     }
-
-    private void Look()
+    
+    private void Look() // simple method to calculate look direction
     {
         float _mouseVertical = -Input.GetAxis("Mouse Y");
         float _mouseHorizontal = Input.GetAxis("Mouse X");

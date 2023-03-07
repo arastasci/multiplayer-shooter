@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
-
+/// <summary>
+/// This class consists of <see cref="Client.PacketHandler"/> methods.
+/// </summary>
 public class ClientHandle : MonoBehaviour
 {
     public static void Welcome(Packet _packet)
@@ -38,6 +40,7 @@ public class ClientHandle : MonoBehaviour
         GameManager.players[id].transform.position = position;
         GameManager.players[id].isGrounded = isGrounded;
         GameManager.players[id].isAffectedByExplosion = isAffectedByExplosion;
+        if(id == Client.instance.myId)
         UIManager.instance.UpdateSpeed(speed);
     }
     public static void PlayerRotation(Packet packet)

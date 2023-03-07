@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField]const float SLIDE_OFF_TIME = 1.0f;
     Vector3 lastNormalWJ;
     Collider lastCollider;
 
@@ -53,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
  
     IEnumerator SlideOff()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(SLIDE_OFF_TIME);
         slidingOff = true;
     }
 
@@ -176,6 +177,12 @@ public class PlayerMovement : MonoBehaviour
 
         return new Vector2(xMag, yMag);
     }
+    /// <summary>
+    /// Applies drag force for when the player is not moving.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="mag"></param>
     void CounterMovement(float x, float y, Vector2 mag)
     {
         if (!isGrounded || isJumping) return;
@@ -220,7 +227,7 @@ public class PlayerMovement : MonoBehaviour
         contacts = new ContactPoint[col.contactCount];
         int points = col.GetContacts(contacts);
 
-        
+        // wall jump code
         if (((1 << col.gameObject.layer) & whatIsGround) == 0)
         {
             for (int i = 0; i < points; i++)
@@ -236,7 +243,7 @@ public class PlayerMovement : MonoBehaviour
                     isWallWalking = true;
                     wallNormal = cp.normal;
                     rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-                    StartCoroutine(SlideOff());
+                    StartCoroutine(SlideOff()); // slides off after the specified time
                     break;
                 }
             }

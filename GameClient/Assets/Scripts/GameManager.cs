@@ -73,7 +73,9 @@ public class GameManager : MonoBehaviour
         spawner.GetComponent<ItemSpawner>().Initialize(spawnerID,itemType,hasItem);
         itemSpawners.Add(spawnerID, spawner.GetComponent<ItemSpawner>());
     }
-
+    /// <summary>
+    /// Clears all the dictionaries that contain information about the current game session.
+    /// </summary>
     public void ClearDictionaries()
     {
         players.Clear();

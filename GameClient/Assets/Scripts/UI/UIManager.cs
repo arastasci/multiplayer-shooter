@@ -62,6 +62,9 @@ public class UIManager : MonoBehaviour
     {
         ammoInfo.text = ammoInMag.ToString() + " / " + ammoTotal.ToString();
     }
+    /// <summary>
+    /// Connected to a Unity Event that connects the player to the server with the IP:Port in the input field.
+    /// </summary>
     public void ConnectToServer()
     {
         startMenu.SetActive(false);
@@ -69,7 +72,7 @@ public class UIManager : MonoBehaviour
         gameUI.SetActive(true);
         usernameField.interactable = false;
         ipField.interactable = false;
-        if (ipField.text == "t")
+        if (ipField.text == "t") // for testing locally
         {
             Client.instance.ConnectToServer("127.0.0.1:26950");
         }else

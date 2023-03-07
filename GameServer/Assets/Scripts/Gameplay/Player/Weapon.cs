@@ -46,7 +46,7 @@ public class Weapon : MonoBehaviour
     }
     public void DecrementBullet(int playerID)
     {
-
+        
         if (bulletLeftInMag == 0 )
         {
             canShoot = false;
@@ -54,7 +54,7 @@ public class Weapon : MonoBehaviour
             return;
         }
         bulletLeftInMag--;
-        StartCoroutine(ShootCooldown());
+        StartCoroutine(ShootCooldown()); 
         
     }
 
@@ -81,7 +81,7 @@ public class Weapon : MonoBehaviour
             canReload = true;
         }
         canShoot = true;
-        ServerSend.PlayerWeaponInfo(playerID, this);
+        ServerSend.PlayerWeaponInfo(playerID, this); // send info so it's displayed in UI
         
     }
 }

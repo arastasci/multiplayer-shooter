@@ -236,7 +236,6 @@ public class ServerSend
                 packet.Write(client.player.GetKill());
                 packet.Write(client.player.GetDeath());
                
-                // todo: ping player and send info
             }
             SendTCPDataToAll(packet);
         }
@@ -275,8 +274,7 @@ public class ServerSend
     public static void SelfKill(int player)
     {
         using (Packet packet = new Packet((int)ServerPackets.selfkill))
-        {
-            
+        {   
             SendTCPData(player,packet);
         }
     }

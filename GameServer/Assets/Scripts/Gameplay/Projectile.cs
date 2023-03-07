@@ -55,7 +55,7 @@ public class Projectile : MonoBehaviour
 
     IEnumerator DestroyThis()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(10f); // destroy this if it hasnt hit anything
         DestroyProjectile();
     }
     void DestroyProjectile()

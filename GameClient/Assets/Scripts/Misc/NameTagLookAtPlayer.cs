@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// This class is used to only display nametags when the player carrying it is visible to the local player.
+/// </summary>
 public class NameTagLookAtPlayer : MonoBehaviour
 {
     public static Transform localPlayer;
@@ -21,7 +23,7 @@ public class NameTagLookAtPlayer : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 dir = localPlayer.position - transform.position;
-        CastRay(dir);
+        CastRay(dir); // very expensive call, might ditch it or have to make a more affordable solution.
        // Debug.Log(collider.name);
         transform.forward = new Vector3(-dir.x, 0, -dir.z);
     }

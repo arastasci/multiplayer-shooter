@@ -31,7 +31,7 @@ public class PlayerManager : MonoBehaviour
         this.id = id;
         username = userName;
         health = maxHealth;
-        if (id == Client.instance.myId)
+        if (id == Client.instance.myId) // init ui and controller
         {
             UIManager.instance.slider.maxValue = maxHealth;
             UIManager.instance.UpdateHealth(maxHealth);
@@ -104,7 +104,7 @@ public class PlayerManager : MonoBehaviour
     {
         SetMesh(false);
         weapons[activeWeapon].SetActive(false);
-        CameraSwitcher.instance.SwitchCameras();
+        CameraSwitcher.instance.SwitchCameras(); // no LockToKiller
         playerController.enabled = false;
         UIManager.instance.DisplaySelfKill();
         
@@ -153,13 +153,11 @@ public class PlayerManager : MonoBehaviour
     public void SetActiveWeaponRotation(Quaternion rotation)
     {
         weapons[activeWeapon].transform.rotation = rotation;
-            //Vector3 weaponForward = weapons[activeWeapon].transform.forward;
-        //glasses.forward = new Vector3();
-
-        // Vector3 euler = rotation.eulerAngles;
-        // glasses.localRotation = Quaternion.Euler(new Vector3(Mathf.Clamp(euler.x, -45, 45),
-        //     0,0));
     }
+    /// <summary>
+    /// Makes the character invisible.
+    /// </summary>
+    /// <param name="value"></param>
     private void SetMesh(bool value)
     {
         foreach (MeshRenderer meshRenderer in meshRenderers)

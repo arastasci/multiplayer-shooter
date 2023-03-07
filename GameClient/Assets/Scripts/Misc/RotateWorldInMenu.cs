@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Misc effect class to rotate the world in the menu.
+/// </summary>
 public class RotateWorldInMenu : MonoBehaviour
 {
     public static RotateWorldInMenu instance;

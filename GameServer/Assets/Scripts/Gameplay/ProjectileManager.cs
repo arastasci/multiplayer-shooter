@@ -32,13 +32,19 @@ public class ProjectileManager : MonoBehaviour
         }
         nextProjectileID = 0;
     }
+    /// <summary>
+    /// Instantiates a projectile and returns the <see cref="ProjectileInfo"/> of the instantiated projectile.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="direction"></param>
+    /// <returns></returns>
     public ProjectileInfo InitializeProjectile(Player player, Vector3 direction)
     {
         int projectileID = nextProjectileID;
         nextProjectileID++;
         Vector3 position = player.shootOrigin.position;
-        GameObject projectile = Instantiate(projectilePrefab, position, Quaternion.identity); // dunno
-        Debug.DrawRay(player.shootOrigin.position,direction, Color.yellow, 4f);
+        GameObject projectile = Instantiate(projectilePrefab, position, Quaternion.identity); 
+        // Debug.DrawRay(player.shootOrigin.position,direction, Color.yellow, 4f);
         Projectile projectileP = projectile.GetComponent<Projectile>();
         projectileP.SetID(projectileID,player.id);
         Projectiles.Add(projectileID, projectileP);
@@ -48,7 +54,7 @@ public class ProjectileManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        ProjectileTransformInfo();
+        ProjectileTransformInfo(); // sends all the projectiles' transform info to clients.
     }
 
     void ProjectileTransformInfo()

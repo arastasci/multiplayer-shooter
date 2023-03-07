@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     public void FixedUpdate()
     {
         if(rb.isKinematic) return;
-
+        // if player falls out the map, kill
         if (transform.position.y < -8)
         {
             Die(id);
@@ -66,14 +66,7 @@ public class Player : MonoBehaviour
         ServerSend.PlayerRotation(this);
     }
 
-    
-    private void Move(Vector2 inputDirection)
-    {
-        rb.AddForce(Vector3.down * Time.fixedDeltaTime * 15);
-
-        
-        
-    }
+   
 
     public void SetInput(PlayerInput input, Quaternion rotation, Quaternion weaponRotation)
     {
@@ -83,6 +76,11 @@ public class Player : MonoBehaviour
 
     }
     #region shoot
+    /// <summary>
+    /// Shoots a raycast with the pistol.
+    /// </summary>
+    /// <param name="direction"></param>
+     
     public void Shoot(Vector3 direction)
     {
 
@@ -97,14 +95,20 @@ public class Player : MonoBehaviour
         }
 
     }
-
+    /// <summary>
+    /// Launcehs a projectile with the rocket launcher.
+    /// </summary>
+    /// <param name="direction"></param>
     public void LaunchProjectile(Vector3 direction)
     {
         ProjectileInfo projectileInfo = ProjectileManager.instance.InitializeProjectile(this, direction);
 
         ServerSend.ProjectileLaunched(this, projectileInfo.ID, projectileInfo.projectileShotFrom);
     }
-    
+    /// <summary>
+    /// Fires the active gun when prompted.
+    /// </summary>
+    /// <param name="direction"></param>
     public void Fire(Vector3 direction)
     {
         if (!weapons[activeWeaponID].canShoot)
@@ -112,7 +116,7 @@ public class Player : MonoBehaviour
             if (weapons[activeWeaponID].canReload && weapons[activeWeaponID].bulletLeftInMag == 0) Reload();
             return;
         }
-        AudioManager.instance.PlayAudio(FXID.fire, FXEntity.player, id);
+        AudioManager.instance.PlayAudio(FXID.fire, FXEntity.player, id); // might make this function an event invoker
         weapons[activeWeaponID].DecrementBullet(id);
         switch (activeWeaponID)
         {
@@ -125,7 +129,10 @@ public class Player : MonoBehaviour
         }
         ServerSend.PlayerWeaponInfo(id, weapons[activeWeaponID]);
         
-        foreach(Weapon w in weapons)
+
+        // fills each weapon if they are empty - a temporary solution for when i wanted to
+        // test the game w/ friends without the limitation of ammo
+        foreach(Weapon w in weapons) 
         {
             if (w.bulletLeftTotal + w.bulletLeftInMag == 0)
             {
@@ -186,7 +193,12 @@ public class Player : MonoBehaviour
 
         ServerSend.PlayerHealth(this, byPlayer);
     }
-
+    /// <summary>
+    /// This player dies and server sends this info to every client.
+    /// Several methods are invoked by this method both server and client side.
+    /// Check PlayerHealth ClientHandle method for related issues.
+    /// </summary>
+    /// <param name="byPlayer"></param>
     private void Die(int byPlayer)
     {
         bool isSelfKill = false;
@@ -206,7 +218,7 @@ public class Player : MonoBehaviour
         ServerSend.UpdateScoreBoard();
         health = 0;
         rb.isKinematic = true;
-        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative; 
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative; // fix for weird bug
         moveMultiplier = 1f;
         jumpMultiplier = 1f;
         maxSpeedMultiplier = 1f;

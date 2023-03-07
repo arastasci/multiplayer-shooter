@@ -42,13 +42,20 @@ public class MeasurePing : MonoBehaviour
             Debug.Log("ping");
         }
     }
-
+    /// <summary>
+    /// Sets the ping of the specified player in the scoreboard.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="ping"></param>
     public void SetPing(PlayerManager player, int ping)
     {
         Row row = player.score.row;
         row.ping.text = ping.ToString();
     }
 
+    /// <summary>
+    /// Measures the round-trip time of the ping packet sent and sends it to the server.
+    /// </summary>
     public void Ping()
     {
         int ping = (int)(1000f * (Time.time - pingTime));
