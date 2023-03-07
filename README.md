@@ -1,6 +1,6 @@
 # multiplayer shooter
 
-This is the source code of the multiplayer shooter game I made. The repository consists of two projects; one for the client and one for the server.
+This is the source code of the multiplayer shooter game I made. The repository consists of two projects; one for the client and one for the server. Credit to Tom Weiland's YouTube series to set the networking environment up.
 
 ## Gameplay
 
@@ -8,4 +8,4 @@ The gameloop is as simple as it gets, it's an endless deathmatch. You have two w
 
 ## Setup
 
-In order to play, you need to required set a server up. You can either forward a port for your router or use a server provider like AWS and set up a dedicated server.
+In order to play, you need to set a server up. You can either forward a port for your router or use a server provider like AWS and set up a dedicated server.
