@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private Sprite rocketImage;
     [SerializeField] private Sprite pistolImage;
+    [SerializeField] private Sprite skullImage;
     
     string[] killStrings = { "pwned you","rizzed you","fragged you" };
     private void Awake()
@@ -131,6 +132,11 @@ public class UIManager : MonoBehaviour
             GameManager.players[killer]
             .username;
         killRow.Victim = GameManager.players[victim].username;
+        if(killer == victim)
+        {
+            killRow.Weapon = skullImage;
+            return;
+        }
         switch (weapon)
         {
             case 0:

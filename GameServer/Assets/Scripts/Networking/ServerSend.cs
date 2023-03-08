@@ -274,8 +274,9 @@ public class ServerSend
     public static void SelfKill(int player)
     {
         using (Packet packet = new Packet((int)ServerPackets.selfkill))
-        {   
-            SendTCPData(player,packet);
+        {
+            packet.Write(player);
+            SendTCPDataToAll(packet);
         }
     }
 

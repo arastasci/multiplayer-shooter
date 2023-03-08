@@ -194,7 +194,10 @@ public class ClientHandle : MonoBehaviour
 
     public static void SelfKill(Packet packet)
     {
-        GameManager.players[Client.instance.myId].SelfKill();
+        int playerId = packet.ReadInt();
+        if(playerId == Client.instance.myId)
+        GameManager.players[playerId].SelfKill();
+        UIManager.instance.LogKill(playerId, playerId, -1);
         
     }
 }
